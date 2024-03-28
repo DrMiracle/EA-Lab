@@ -3,6 +3,9 @@ import numpy as np
 from selection.selection_method import SelectionMethod
 from copy import copy
 
+beta_value = 2
+c_value = 0.9801
+beta_value_modified = 1.4
 
 class RWS(SelectionMethod):
     def select(self, population):
@@ -19,8 +22,8 @@ class RWS(SelectionMethod):
         population.update_chromosomes(mating_pool)
 
 class LinearRankingRWS(SelectionMethod):
-    def __init__(self, beta):
-        self.beta = beta
+    # def __init__(self, beta):
+    #     self.beta = beta
 
     def select(self, population):
         fitness_list = population.fitnesses
@@ -29,15 +32,15 @@ class LinearRankingRWS(SelectionMethod):
         ranks = np.empty(n)
         ranks[rank_order] = np.arange(0, n)
 
-        probabilities = ((2 - self.beta) / n) + (2 * ranks * (self.beta - 1)) / (n * (n - 1))
+        probabilities = ((2 - beta_value) / n) + (2 * ranks * (beta_value - 1)) / (n * (n - 1))
 
         chosen = np.random.choice(population.chromosomes, size=n, p=probabilities)
         mating_pool = np.array([copy(chr) for chr in chosen])
         population.update_chromosomes(mating_pool)
 
 class ExponentialRankingRWS(SelectionMethod):
-    def __init__(self, c):
-        self.c = c
+    # def __init__(self, c):
+    #     self.c = c
 
     def select(self, population):
         fitness_list = population.fitnesses
@@ -46,15 +49,19 @@ class ExponentialRankingRWS(SelectionMethod):
         ranks = np.empty(n)
         ranks[rank_order] = np.arange(0, n)
 
-        probabilities = (self.c - 1) / (self.c ** n - 1) * self.c ** (n - ranks)
+        unnormalized_probabilities = (c_value - 1) / (c_value ** n - 1) * c_value ** (n - ranks)
+
+        # Normalize probabilities
+        sum_probabilities = np.sum(unnormalized_probabilities)
+        probabilities = unnormalized_probabilities / sum_probabilities
 
         chosen = np.random.choice(population.chromosomes, size=n, p=probabilities)
         mating_pool = np.array([copy(chr) for chr in chosen])
         population.update_chromosomes(mating_pool)
 
 class LinearRankingModifiedRWS(SelectionMethod):
-    def __init__(self, beta):
-        self.beta = beta
+    # def __init__(self, beta):
+    #     self.beta = beta
 
     def select(self, population):
         fitness_list = population.fitnesses
@@ -73,7 +80,7 @@ class LinearRankingModifiedRWS(SelectionMethod):
             modified_ranks[i:i + count] = np.mean(ranks[i:i + count])
             i += count
 
-        probabilities = ((2 - self.beta) / n) + (2 * modified_ranks * (self.beta - 1)) / (n * (n - 1))
+        probabilities = ((2 - beta_value_modified) / n) + (2 * modified_ranks * (beta_value_modified - 1)) / (n * (n - 1))
 
         chosen = np.random.choice(population.chromosomes, size=n, p=probabilities)
         mating_pool = np.array([copy(chr) for chr in chosen])

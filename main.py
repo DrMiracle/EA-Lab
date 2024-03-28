@@ -18,8 +18,17 @@ beta_value_modified = 1.4
 if env == 'test':
     fitness_functions = [
         (FconstALL(100), 'FconstALL'),
-        (FH(100), 'FH'),
+        #(FH(100), 'FH'),
         (Fx2(FloatEncoder(0.0, 10.23, 10)), 'Fx2'),
+        (Fx2(FloatEncoder(0.0, 10.23, 10, is_gray=True)), 'Fx2_gray'),
+        (F5122subx2(FloatEncoder(-5.12, 5.11, 10)), 'F5122subx2'),
+        (F5122subx2(FloatEncoder(-5.12, 5.11, 10, is_gray=True)), 'F5122subx2_gray'),
+        (Fexp(0.25, FloatEncoder(0.0, 10.23, 10)), 'Fexp0.25'),
+        (Fexp(0.25, FloatEncoder(0.0, 10.23, 10, is_gray=True)), 'Fexp0.25_gray'),
+        (Fexp(1, FloatEncoder(0.0, 10.23, 10)), 'Fexp1'),
+        (Fexp(1, FloatEncoder(0.0, 10.23, 10, is_gray=True)), 'Fexp1_gray'),
+        (Fexp(2, FloatEncoder(0.0, 10.23, 10)), 'Fexp2'),
+        (Fexp(2, FloatEncoder(0.0, 10.23, 10, is_gray=True)), 'Fexp2_gray'),
         (Frastr(7, FloatEncoder(-5.12, 5.11, 10)), 'Frastr'),
         (Frastr(7, FloatEncoder(-5.12, 5.11, 10, is_gray=True)), 'Frastr_gray'),
         (Fdeb2(FloatEncoder(0, 1.023, 10)), 'Fdeb2'),
@@ -29,9 +38,9 @@ if env == 'test':
     ]
     selection_methods = [
         #(RWS, 'RWS'),
-        (LinearRankingRWS, ('RWS_linear', beta_value)),
-        (ExponentialRankingRWS, ('RWS_exponential', c_value)),
-        (LinearRankingModifiedRWS, ('RWS_linear', beta_value_modified)),
+        (LinearRankingRWS, 'RWS_linear'),
+        (ExponentialRankingRWS, 'RWS_exponential'),
+        (LinearRankingModifiedRWS, 'RWS_linear'),
     ]
     gen_operators = [
         (BlankGenOperator, 'no_operators')
