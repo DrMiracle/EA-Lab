@@ -108,11 +108,11 @@ class ExperimentStats:
             self.Max_NI = max(NIs)
             self.Avg_NI = np.mean(NIs)
             self.Sigma_NI = np.std(NIs)
-            print(f"Min_NI: {self.Min_NI}, Max_NI: {self.Max_NI}, Avg_NI: {self.Avg_NI}, Sigma_NI: {self.Sigma_NI}")
+            # print(f"Min_NI: {self.Min_NI}, Max_NI: {self.Max_NI}, Avg_NI: {self.Avg_NI}, Sigma_NI: {self.Sigma_NI}")
 
     def calculate_non(self):
         unsuccessful_converged_runs = [run for run in self.runs if not run.is_successful and run.is_converged]
-        print(f"Unsuc: {unsuccessful_converged_runs}")
+        # print(f"Unsuc: {unsuccessful_converged_runs}")
         # Calculate stats for successful runs
         self.N_nonSuc = len(unsuccessful_converged_runs)
         self.nonSuc = self.N_nonSuc / NR
@@ -132,9 +132,9 @@ class ExperimentStats:
             self.non_Avg_F_found = np.mean(non_F_found)
             self.non_Sigma_F_found = np.std(non_F_found)
             self.non_Max_F_found = max(non_F_found)
-            print(f"non_Min_NI: {self.non_Min_NI}, non_Max_NI: {self.non_Max_NI}, non_Avg_NI: {self.non_Avg_NI},"
-                  f" non_Sigma_NI: {self.non_Sigma_NI}, non_Avg_F_found: {self.non_Avg_F_found}, "
-                  f"non_Sigma_F_found: {self.non_Sigma_F_found}, non_Max_F_found: {self.non_Max_F_found}")
+            # print(f"non_Min_NI: {self.non_Min_NI}, non_Max_NI: {self.non_Max_NI}, non_Avg_NI: {self.non_Avg_NI},"
+            #       f" non_Sigma_NI: {self.non_Sigma_NI}, non_Avg_F_found: {self.non_Avg_F_found}, "
+            #       f"non_Sigma_F_found: {self.non_Sigma_F_found}, non_Max_F_found: {self.non_Max_F_found}")
 
     def __calculate_rr_stats(self, runs: list[RunStats]):
         RR_min_list = [run.RR_min for run in runs]

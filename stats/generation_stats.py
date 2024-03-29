@@ -44,8 +44,19 @@ class GenerationStats:
 
             self.best_copies_percentage = self.num_of_best / N
 
-            unique_chromosomes = set(self.population.chromosomes)
+            unique_chromosomes = []
+            for i in range(len(self.population.chromosomes)):
+                is_unique = True
+                for j in range(i):
+                    if self.population.chromosomes[i] == self.population.chromosomes[j]:
+                        is_unique = False
+                        break
+                if is_unique:
+                    unique_chromosomes.append(self.population.chromosomes[i])
+                    self.unique_chromosomes_count = len(unique_chromosomes)
+
             self.unique_chromosomes_count = len(unique_chromosomes)
+
             if self.f_avg != 0:
                 self.fitness_ratio = self.f_best / self.f_avg
             else:
