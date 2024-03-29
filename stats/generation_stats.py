@@ -1,3 +1,5 @@
+from math import comb, sqrt
+
 from config import N
 from model.population import Population
 
@@ -13,6 +15,12 @@ class GenerationStats:
         self.num_of_best = None
         self.optimal_count = None
         self.growth_rate = None
+        self.best_copies_percentage = None
+        self.unique_chromosomes_count = None
+        self.fitness_ratio = None
+        # self.fisher_exact_test = None
+        # self.kendalls_tau = None
+
         self.difference = None
         self.intensity = None
         self.reproduction_rate = None
@@ -34,6 +42,18 @@ class GenerationStats:
                 num_of_prev_best = self.population.count_fitness_at_least(prev_gen_stats.f_best)
                 self.growth_rate = num_of_prev_best / prev_gen_stats.num_of_best
 
+            self.best_copies_percentage = self.num_of_best / N
+
+            unique_chromosomes = set(self.population.chromosomes)
+            self.unique_chromosomes_count = len(unique_chromosomes)
+            if self.f_avg != 0:
+                self.fitness_ratio = self.f_best / self.f_avg
+            else:
+                self.fitness_ratio = float('inf')
+
+            # self.calculate_fishers_exact_test()
+            # self.calculate_kendalls_tau_b()
+
     def calculate_stats_after_selection(self):
         ids_after_selection = set(self.population.get_ids())
         self.reproduction_rate = len(ids_after_selection) / N
@@ -47,3 +67,52 @@ class GenerationStats:
                 self.intensity = 1
             else:
                 self.intensity = self.difference / self.f_std
+
+    def calculate_fishers_exact_test(self):
+        if self.param_names[0] != 'FconstALL':
+            # Calculate A, B, C, D based on the provided definitions
+            t_median = self.population.get_trait_median()
+            c_median = self.population.get_offspring_median()
+
+            A = sum(1 for i in self.population if i.trait <= t_median and i.offspring <= c_median)
+            B = sum(1 for i in self.population if i.trait > t_median and i.offspring <= c_median)
+            C = sum(1 for i in self.population if i.trait <= t_median and i.offspring > c_median)
+            D = sum(1 for i in self.population if i.trait > t_median and i.offspring > c_median)
+
+            # Calculate the likelihood using the hypergeometric distribution formula
+            p_value = (comb(A + B, A) * comb(C + D, C)) / comb(A + B + C + D, A + C)
+
+            # Store the p-value in the GenerationStats object
+            self.fisher_exact_test = p_value
+
+    def calculate_kendalls_tau_b(self):
+        # Calculate K (number of concordant pairs), D (number of discordant pairs), nt (number of ties in trait),
+        # and nc (number of ties in offspring)
+        K = 0
+        D = 0
+        nt = 0
+        nc = 0
+        n = len(self.population)
+
+        for i in range(n):
+            for j in range(i + 1, n):
+                ti = self.population[i].trait
+                tj = self.population[j].trait
+                ci = self.population[i].offspring
+                cj = self.population[j].offspring
+
+                if ti == tj:
+                    nt += 1
+                if ci == cj:
+                    nc += 1
+
+                if (ti > tj and ci > cj) or (ti < tj and ci < cj):
+                    K += 1
+                elif (ti > tj and ci < cj) or (ti < tj and ci > cj):
+                    D += 1
+
+        # Calculate Kendall's Tau-b
+        P_tau = (K - D) / sqrt((comb(n, 2) - nt) * (comb(n, 2) - nc))
+
+        # Store the value in the GenerationStats object
+        self.kendalls_tau_b = P_tau

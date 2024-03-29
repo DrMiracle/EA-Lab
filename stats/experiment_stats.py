@@ -14,13 +14,15 @@ class ExperimentStats:
         self.Avg_NI = None
         self.Sigma_NI = None
 
-        # not implemented yet
         self.N_nonSuc = 0
         self.nonSuc = 0
         self.nonMin_NI = None
         self.nonMax_NI = None
         self.nonAvg_NI = None
         self.nonSigma_NI = None
+        self.non_Avg_F_found = None
+        self.non_Sigma_F_found = None
+        self.non_Max_F_found = None
 
         # Reproduction Rate
         self.Min_RR_min = None

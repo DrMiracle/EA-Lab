@@ -17,7 +17,7 @@ beta_value_modified = 1.4
 
 if env == 'test':
     fitness_functions = [
-        (FconstALL(100), 'FconstALL'),
+        #(FconstALL(100), 'FconstALL'),
         #(FH(100), 'FH'),
         (Fx2(FloatEncoder(0.0, 10.23, 10)), 'Fx2'),
         (Fx2(FloatEncoder(0.0, 10.23, 10, is_gray=True)), 'Fx2_gray'),
@@ -37,14 +37,13 @@ if env == 'test':
         (Fdeb4(FloatEncoder(0, 1.023, 10, is_gray=True)), 'Fdeb4_gray'),
     ]
     selection_methods = [
-        #(RWS, 'RWS'),
-        (LinearRankingRWS(beta_values[0]), 'RWS_linear'),
-        (LinearRankingRWS(beta_values[1]), 'RWS_linear'),
-        (LinearRankingRWS(beta_values[2]), 'RWS_linear'),
-        (ExponentialRankingRWS(c_values[0]), 'RWS_exponential'),
-        (ExponentialRankingRWS(c_values[1]), 'RWS_exponential'),
-        (ExponentialRankingRWS(c_values[2]), 'RWS_exponential'),
-        (ExponentialRankingRWS(c_values[3]), 'RWS_exponential'),
+        (LinearRankingRWS(beta_values[0]), 'RWS_linear_par1'),
+        (LinearRankingRWS(beta_values[1]), 'RWS_linear_par2'),
+        (LinearRankingRWS(beta_values[2]), 'RWS_linear_par3'),
+        (ExponentialRankingRWS(c_values[0]), 'RWS_exponential_par1'),
+        (ExponentialRankingRWS(c_values[1]), 'RWS_exponential_par2'),
+        (ExponentialRankingRWS(c_values[2]), 'RWS_exponential_par3'),
+        (ExponentialRankingRWS(c_values[3]), 'RWS_exponential_par4'),
         (LinearRankingModifiedRWS(beta_value_modified), 'RWS_linear_modified'),
     ]
     gen_operators = [

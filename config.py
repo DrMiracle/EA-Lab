@@ -30,7 +30,9 @@ RUN_STATS_NAMES = [
 ]
 EXP_STATS_NAMES = [
     'Suc', 'N_Suc', 'Min_NI', 'Max_NI', 'Avg_NI', 'Sigma_NI',
-    
+    'N_nonSuc', 'nonSuc', 'nonMin_NI', 'nonMax_NI', 'nonAvg_NI', 'nonSigma_NI',
+    'non_Avg_F_found', 'non_Sigma_F_found', 'non_Max_F_found',
+
     'Min_RR_min', 'NI_RR_min', 'Max_RR_max', 'NI_RR_max',
     'Avg_RR_min', 'Avg_RR_max', 'Avg_RR_avg',
     'Sigma_RR_min', 'Sigma_RR_max', 'Sigma_RR_avg',

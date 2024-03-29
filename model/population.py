@@ -88,7 +88,7 @@ class Population:
     def update_chromosomes(self, chromosomes):
         self.chromosomes = chromosomes
         self.update()
-    
+
     def __deepcopy__(self, memo):
         return Population(self.fitness_function, chromosomes=deepcopy(self.chromosomes))
     

@@ -40,6 +40,22 @@ def plot_run_stats(
             growth_rates = growth_rates[1:]
         __plot_stat(growth_rates, param_names, run_i, 'Growth Rate', 'growth_rate')
 
+        best_copies = [gen_stats.best_copies_percentage for gen_stats in gen_stats_list]
+        __plot_stat(best_copies, param_names, run_i, 'Best Chromosome Copies Percentage', 'best_copies_percentage')
+
+        unique_chromosomes = [gen_stats.unique_chromosomes_count for gen_stats in gen_stats_list]
+        __plot_stat(unique_chromosomes, param_names, run_i, 'Unique Chromosomes Count', 'unique_chromosomes_count')
+
+        fitness_ratio = [gen_stats.fitness_ratio for gen_stats in gen_stats_list]
+        __plot_stat(fitness_ratio, param_names, run_i, 'Fitness Ratio (f_max / f_avg)', 'fitness_ratio')
+
+        # fisher_exact_test = [gen_stats.fisher_exact_test for gen_stats in gen_stats_list]
+        # __plot_stat(fisher_exact_test, param_names, run_i, 'Fisher\'s Exact Test', 'fisher_exact_test')
+        #
+        # kendalls_tau_b = [gen_stats.kendalls_tau_b for gen_stats in gen_stats_list]
+        # __plot_stat(kendalls_tau_b, param_names, run_i, 'Kendall\'s Tau-b', 'kendalls_tau_b')
+
+
 def plot_generation_stats(
         population: Population,
         param_names: tuple[str],
