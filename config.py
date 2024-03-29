@@ -3,7 +3,7 @@ env = 'test'
 THREADS = 16
 
 # run parameters
-N = 40 if env == 'test' else 100
+N = 20 if env == 'test' else 100
 G = 2500 if env == 'test' else 10000
 NR = 10 if env == 'test' else 100
 
@@ -30,8 +30,9 @@ RUN_STATS_NAMES = [
 ]
 EXP_STATS_NAMES = [
     'Suc', 'N_Suc', 'Min_NI', 'Max_NI', 'Avg_NI', 'Sigma_NI',
+
     'N_nonSuc', 'nonSuc', 'nonMin_NI', 'nonMax_NI', 'nonAvg_NI', 'nonSigma_NI',
-    'non_Avg_F_found', 'non_Sigma_F_found', 'non_Max_F_found',
+    'nonAvg_F_found', 'nonSigma_F_found', 'nonMax_F_found',
 
     'Min_RR_min', 'NI_RR_min', 'Max_RR_max', 'NI_RR_max',
     'Avg_RR_min', 'Avg_RR_max', 'Avg_RR_avg',

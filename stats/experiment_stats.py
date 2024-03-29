@@ -20,9 +20,9 @@ class ExperimentStats:
         self.nonMax_NI = None
         self.nonAvg_NI = None
         self.nonSigma_NI = None
-        self.non_Avg_F_found = None
-        self.non_Sigma_F_found = None
-        self.non_Max_F_found = None
+        self.nonAvg_F_found = None
+        self.nonSigma_F_found = None
+        self.nonMax_F_found = None
 
         # Reproduction Rate
         self.Min_RR_min = None
@@ -98,8 +98,11 @@ class ExperimentStats:
             self.__calculate_i_stats(successful_runs)
             self.__calculate_gr_stats(successful_runs)
 
-        self.calculate_non()
-
+        unsuccessful_converged_runs = [run for run in self.runs if not run.is_successful and run.is_converged]
+        self.N_nonSuc = len(unsuccessful_converged_runs)
+        self.nonSuc = self.N_nonSuc / NR
+        # Calculate stats for unsuccessful but converged runs
+        self.__calculate_non_converged_stats(unsuccessful_converged_runs)
 
     def __calculate_convergence_stats(self, runs: list[RunStats]):
         NIs = [run.NI for run in runs]
@@ -110,28 +113,17 @@ class ExperimentStats:
             self.Sigma_NI = np.std(NIs)
             # print(f"Min_NI: {self.Min_NI}, Max_NI: {self.Max_NI}, Avg_NI: {self.Avg_NI}, Sigma_NI: {self.Sigma_NI}")
 
-    def calculate_non(self):
-        unsuccessful_converged_runs = [run for run in self.runs if not run.is_successful and run.is_converged]
-        # print(f"Unsuc: {unsuccessful_converged_runs}")
-        # Calculate stats for successful runs
-        self.N_nonSuc = len(unsuccessful_converged_runs)
-        self.nonSuc = self.N_nonSuc / NR
-
-        # Calculate stats for unsuccessful but converged runs
-        self.__calculate_non_converged_stats(unsuccessful_converged_runs)
-
     def __calculate_non_converged_stats(self, runs: list[RunStats]):
         non_NIs = [run.NI for run in runs]
         non_F_found = [run.F_found for run in runs]
-
         if non_NIs:
-            self.non_Min_NI = min(non_NIs)
-            self.non_Max_NI = max(non_NIs)
-            self.non_Avg_NI = np.mean(non_NIs)
-            self.non_Sigma_NI = np.std(non_NIs)
-            self.non_Avg_F_found = np.mean(non_F_found)
-            self.non_Sigma_F_found = np.std(non_F_found)
-            self.non_Max_F_found = max(non_F_found)
+            self.nonMin_NI = min(non_NIs)
+            self.nonMax_NI = max(non_NIs)
+            self.nonAvg_NI = np.mean(non_NIs)
+            self.nonSigma_NI = np.std(non_NIs)
+            self.nonAvg_F_found = np.mean(non_F_found)
+            self.nonSigma_F_found = np.std(non_F_found)
+            self.nonMax_F_found = max(non_F_found)
             # print(f"non_Min_NI: {self.non_Min_NI}, non_Max_NI: {self.non_Max_NI}, non_Avg_NI: {self.non_Avg_NI},"
             #       f" non_Sigma_NI: {self.non_Sigma_NI}, non_Avg_F_found: {self.non_Avg_F_found}, "
             #       f"non_Sigma_F_found: {self.non_Sigma_F_found}, non_Max_F_found: {self.non_Max_F_found}")
