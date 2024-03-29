@@ -6,7 +6,7 @@ from evo_algorithm import EvoAlgorithm
 from model.population import Population
 from selection.selection_method import SelectionMethod
 from model.gen_operators import GeneticOperator
-from copy import deepcopy
+from copy import deepcopy, copy
 from datetime import datetime
 
 def run_experiment(selection_method: SelectionMethod,
@@ -46,5 +46,6 @@ def run(init_population: Population,
         genetic_operator: GeneticOperator,
         param_names: tuple[str],
         run_i: int):
-    current_run = EvoAlgorithm(deepcopy(init_population), selection_method(), genetic_operator, param_names).run(run_i)
+    sm_obj = copy(selection_method)
+    current_run = EvoAlgorithm(deepcopy(init_population), sm_obj, genetic_operator, param_names).run(run_i)
     return (run_i, current_run)

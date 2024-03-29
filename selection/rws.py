@@ -3,9 +3,6 @@ import numpy as np
 from selection.selection_method import SelectionMethod
 from copy import copy
 
-beta_value = 2
-c_value = 0.9801
-beta_value_modified = 1.4
 
 class RWS(SelectionMethod):
     def select(self, population):
@@ -16,14 +13,15 @@ class RWS(SelectionMethod):
             fitness_list = [0.0001 for _ in fitness_list]
             fitness_sum = 0.0001 * N
 
-        probabilities = [fitness/fitness_sum for fitness in fitness_list]
+        probabilities = [fitness / fitness_sum for fitness in fitness_list]
         chosen = np.random.choice(population.chromosomes, size=N, p=probabilities)
         mating_pool = np.array([copy(chr) for chr in chosen])
         population.update_chromosomes(mating_pool)
 
+
 class LinearRankingRWS(SelectionMethod):
-    # def __init__(self, beta):
-    #     self.beta = beta
+    def __init__(self, beta_value):
+        self.beta_value = beta_value
 
     def select(self, population):
         fitness_list = population.fitnesses
@@ -32,15 +30,16 @@ class LinearRankingRWS(SelectionMethod):
         ranks = np.empty(n)
         ranks[rank_order] = np.arange(0, n)
 
-        probabilities = ((2 - beta_value) / n) + (2 * ranks * (beta_value - 1)) / (n * (n - 1))
+        probabilities = ((2 - self.beta_value) / n) + (2 * ranks * (self.beta_value - 1)) / (n * (n - 1))
 
         chosen = np.random.choice(population.chromosomes, size=n, p=probabilities)
         mating_pool = np.array([copy(chr) for chr in chosen])
         population.update_chromosomes(mating_pool)
 
+
 class ExponentialRankingRWS(SelectionMethod):
-    # def __init__(self, c):
-    #     self.c = c
+    def __init__(self, с_value):
+        self.с_value = с_value
 
     def select(self, population):
         fitness_list = population.fitnesses
@@ -49,7 +48,7 @@ class ExponentialRankingRWS(SelectionMethod):
         ranks = np.empty(n)
         ranks[rank_order] = np.arange(0, n)
 
-        unnormalized_probabilities = (c_value - 1) / (c_value ** n - 1) * c_value ** (n - ranks)
+        unnormalized_probabilities = (self.с_value - 1) / (self.с_value ** n - 1) * self.с_value ** (n - ranks)
 
         # Normalize probabilities
         sum_probabilities = np.sum(unnormalized_probabilities)
@@ -59,9 +58,10 @@ class ExponentialRankingRWS(SelectionMethod):
         mating_pool = np.array([copy(chr) for chr in chosen])
         population.update_chromosomes(mating_pool)
 
+
 class LinearRankingModifiedRWS(SelectionMethod):
-    # def __init__(self, beta):
-    #     self.beta = beta
+    def __init__(self, beta_value_modified):
+        self.beta_value_modified = beta_value_modified
 
     def select(self, population):
         fitness_list = population.fitnesses
@@ -80,12 +80,12 @@ class LinearRankingModifiedRWS(SelectionMethod):
             modified_ranks[i:i + count] = np.mean(ranks[i:i + count])
             i += count
 
-        probabilities = ((2 - beta_value_modified) / n) + (2 * modified_ranks * (beta_value_modified - 1)) / (n * (n - 1))
+        probabilities = ((2 - self.beta_value_modified) / n) + (2 * modified_ranks * (self.beta_value_modified - 1)) / (
+                    n * (n - 1))
 
         chosen = np.random.choice(population.chromosomes, size=n, p=probabilities)
         mating_pool = np.array([copy(chr) for chr in chosen])
         population.update_chromosomes(mating_pool)
-
 
 
 class DisruptiveRWS(SelectionMethod):
@@ -98,7 +98,7 @@ class DisruptiveRWS(SelectionMethod):
             f_scaled = [0.0001 for _ in f_scaled]
             fitness_sum = 0.0001 * N
 
-        probabilities = [fitness/fitness_sum for fitness in f_scaled]
+        probabilities = [fitness / fitness_sum for fitness in f_scaled]
         chosen = np.random.choice(population.chromosomes, size=N, p=probabilities)
         mating_pool = np.array([copy(chr) for chr in chosen])
         population.update_chromosomes(mating_pool)
@@ -116,7 +116,7 @@ class BlendedRWS(SelectionMethod):
             f_scaled = [0.0001 for _ in f_scaled]
             fitness_sum = 0.0001 * N
 
-        probabilities = [fitness/fitness_sum for fitness in f_scaled]
+        probabilities = [fitness / fitness_sum for fitness in f_scaled]
         chosen = np.random.choice(population.chromosomes, size=N, p=probabilities)
         mating_pool = np.array([copy(chr) for chr in chosen])
         population.update_chromosomes(mating_pool)
@@ -144,7 +144,7 @@ class WindowRWS(SelectionMethod):
             f_scaled = [0.0001 for _ in f_scaled]
             fitness_sum = 0.0001 * N
 
-        probabilities = [fitness/fitness_sum for fitness in f_scaled]
+        probabilities = [fitness / fitness_sum for fitness in f_scaled]
         chosen = np.random.choice(population.chromosomes, size=N, p=probabilities)
         mating_pool = np.array([copy(chr) for chr in chosen])
         population.update_chromosomes(mating_pool)

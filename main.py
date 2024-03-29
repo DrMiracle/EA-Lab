@@ -10,8 +10,8 @@ from datetime import datetime
 import time
 
 # Initialize parameters
-beta_value = 2
-c_value = 0.9801
+beta_values = [2, 1.6, 1.4]
+c_values = [0.9801, 0.96059601, 0.922744694, 0.904382075]
 beta_value_modified = 1.4
 
 
@@ -38,9 +38,14 @@ if env == 'test':
     ]
     selection_methods = [
         #(RWS, 'RWS'),
-        (LinearRankingRWS, 'RWS_linear'),
-        (ExponentialRankingRWS, 'RWS_exponential'),
-        (LinearRankingModifiedRWS, 'RWS_linear'),
+        (LinearRankingRWS(beta_values[0]), 'RWS_linear'),
+        (LinearRankingRWS(beta_values[1]), 'RWS_linear'),
+        (LinearRankingRWS(beta_values[2]), 'RWS_linear'),
+        (ExponentialRankingRWS(c_values[0]), 'RWS_exponential'),
+        (ExponentialRankingRWS(c_values[1]), 'RWS_exponential'),
+        (ExponentialRankingRWS(c_values[2]), 'RWS_exponential'),
+        (ExponentialRankingRWS(c_values[3]), 'RWS_exponential'),
+        (LinearRankingModifiedRWS(beta_value_modified), 'RWS_linear_modified'),
     ]
     gen_operators = [
         (BlankGenOperator, 'no_operators')

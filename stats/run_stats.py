@@ -9,6 +9,7 @@ class RunStats:
         self.F_found = None
         self.F_avg = None
         self.is_successful = False
+        self.is_converged = False
 
         # Reproduction Rate
         self.RR_min = None
@@ -43,6 +44,7 @@ class RunStats:
         self.GR_late = None
         self.NI_GR_late = None
         self.GR_avg = None
+
 
     def update_stats_for_generation(self, gen_stats: GenerationStats, gen_i):
         # Reproduction Rate

@@ -43,6 +43,7 @@ class EvoAlgorithm:
         gen_stats = self.__calculate_final_stats(run_i)
         self.run_stats.NI = self.gen_i
         self.run_stats.is_successful = self.__check_success(gen_stats)
+        self.run_stats.is_converged = self.has_converged
 
         if run_i < RUNS_TO_PLOT:
             plotting.plot_generation_stats(self.population, self.param_names, run_i, self.gen_i)
@@ -83,7 +84,7 @@ class EvoAlgorithm:
     def __check_success(self, gen_stats: GenerationStats):
         if self.param_names[0] == 'FconstALL':
             return self.has_converged
-        elif self.param_names[0] == 'FHD':
+        elif self.param_names[0] == 'FH':
             return self.has_converged and gen_stats.optimal_count >= N * 0.9
         else:
             return self.has_converged and self.population.found_close_to_optimal()
