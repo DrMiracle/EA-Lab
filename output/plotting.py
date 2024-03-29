@@ -185,5 +185,6 @@ def __get_path_hierarchy(param_names, run_i):
         str(N),
         param_names[1], # selection method
         param_names[2], # genetic operator
+        param_names[3], # num_optim
         str(run_i)
     ]

@@ -5,16 +5,18 @@ from copy import deepcopy, copy
 
 
 class Population:
-    def __init__(self, fitness_function, seed=0, chromosomes=None):
+    def __init__(self, fitness_function, seed=0, num_optimal = 1, chromosomes=None):
         self.fitness_function = fitness_function
 
         if chromosomes is not None:
             self.chromosomes = chromosomes
         else:
-            self.chromosomes = np.empty(N, dtype=object)
-            self.chromosomes[0] = copy(fitness_function.get_optimal())
+            if num_optimal != 0:
+                self.chromosomes = np.empty(N, dtype=object)
+                for i in range(num_optimal):
+                    self.chromosomes[i] = copy(fitness_function.get_optimal())
             rng = np.random.default_rng(seed=seed)
-            for chr_i in range(1, N):
+            for chr_i in range(num_optimal, N):
                 genotype = rng.choice([b'0', b'1'], fitness_function.chr_length)
                 self.chromosomes[chr_i] = Chromosome(chr_i, genotype, fitness_function)
 

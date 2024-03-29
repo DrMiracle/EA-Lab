@@ -22,8 +22,8 @@ class FitnessFunc:
     def get_phenotype(self, genotype):
         raise NotImplementedError()
 
-    def generate_population_for_run(self, run_i):
-        return Population(self, seed=get_pop_seed(run_i))
+    def generate_population_for_run(self, run_i, no):
+        return Population(self, seed=get_pop_seed(run_i), num_optimal=no)
     
     def check_chromosome_success(self, chr: Chromosome):
         y_diff = abs(chr.fitness - self.get_optimal().fitness)
@@ -49,7 +49,7 @@ class FconstALL(FitnessFunc):
 
 class FH(FitnessFunc):
     def __init__(self, encoder: Encoder):
-        super().__init__(encoder)
+        super().__init__(encoder.length)
         self.encoder = encoder
 
     def apply(self, genotype):
