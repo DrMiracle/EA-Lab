@@ -1,11 +1,11 @@
 # environment parameters
-env = 'test'
+env = 'work'
 THREADS = 16
 
 # run parameters
-N = 20 if env == 'test' else 100
-G = 2500 if env == 'test' else 10000
-NR = 10 if env == 'test' else 100
+N = 100 if env == 'test' else 100
+G = 10000 if env == 'test' else 10000
+NR = 100 if env == 'test' else 100
 
 # convergence parameters
 EPS = 0.0001

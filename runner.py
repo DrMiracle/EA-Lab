@@ -24,7 +24,7 @@ def run_experiment(selection_method: SelectionMethod,
         )
         for run_i in range(NR)
     ]
-
+    
     for i in range(NR // THREADS):
         with Pool(THREADS) as p:
             results = p.starmap(run, run_param_list[(i * THREADS):((i+1) * THREADS)])

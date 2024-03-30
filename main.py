@@ -1,45 +1,54 @@
+import numpy as np
 from config import env, NR, N
 from model.fitness_functions import *
-from selection.rws import *
-from selection.sus import *
+from selection.ts import *
 from model.encoding import *
 from model.gen_operators import *
 from output import excel
 from runner import run_experiment
 from datetime import datetime
+import itertools
 import time
 
-# Initialize parameters
-beta_values = [2, 1.6, 1.4]
-c_values = [0.9801, 0.96059601, 0.922744694, 0.904382075]
-beta_value_modified = 1.4
-
+def p10(x):
+    return 1
+def p08(x):
+    return 0.8
+def p06(x):
+    return 0.6
+def pxi(x): 
+    return np.max(x)/np.sum(x)
 
 if env == 'test':
     fitness_functions = [
-        # (FconstALL(100), 'FconstALL'),
+        (FconstALL(100), 'FconstALL'),
         (FH(Encoder(100)), 'FH'),
-        # (Fx2(FloatEncoder(0.0, 10.23, 10)), 'Fx2'),
-        # (Fx2(FloatEncoder(0.0, 10.23, 10, is_gray=True)), 'Fx2_gray'),
-        # (F5122subx2(FloatEncoder(-5.12, 5.11, 10)), 'F5122subx2'),
-        # (F5122subx2(FloatEncoder(-5.12, 5.11, 10, is_gray=True)), 'F5122subx2_gray'),
-        # (Fexp(0.25, FloatEncoder(0.0, 10.23, 10)), 'Fexp0.25'),
-        # (Fexp(0.25, FloatEncoder(0.0, 10.23, 10, is_gray=True)), 'Fexp0.25_gray'),
-        # (Fexp(1, FloatEncoder(0.0, 10.23, 10)), 'Fexp1'),
-        # (Fexp(1, FloatEncoder(0.0, 10.23, 10, is_gray=True)), 'Fexp1_gray'),
-        # (Fexp(2, FloatEncoder(0.0, 10.23, 10)), 'Fexp2'),
-        # (Fexp(2, FloatEncoder(0.0, 10.23, 10, is_gray=True)), 'Fexp2_gray'),
-        # (Frastr(7, FloatEncoder(-5.12, 5.11, 10)), 'Frastr'),
-        # (Frastr(7, FloatEncoder(-5.12, 5.11, 10, is_gray=True)), 'Frastr_gray'),
-        # (Fdeb2(FloatEncoder(0, 1.023, 10)), 'Fdeb2'),
-        # (Fdeb2(FloatEncoder(0, 1.023, 10, is_gray=True)), 'Fdeb2_gray'),
-        # (Fdeb4(FloatEncoder(0, 1.023, 10)), 'Fdeb4'),
-        # (Fdeb4(FloatEncoder(0, 1.023, 10, is_gray=True)), 'Fdeb4_gray'),
+        (Fx2(FloatEncoder(0.0, 10.23, 10)), 'Fx2'),
+        (Fx2(FloatEncoder(0.0, 10.23, 10, is_gray=True)), 'Fx2_gray'),
+        (F5122subx2(FloatEncoder(-5.12, 5.11, 10)), 'F5122subx2'),
+        (F5122subx2(FloatEncoder(-5.12, 5.11, 10, is_gray=True)), 'F5122subx2_gray'),
+        (Fexp(0.25, FloatEncoder(0.0, 10.23, 10)), 'Fexp0.25'),
+        (Fexp(0.25, FloatEncoder(0.0, 10.23, 10, is_gray=True)), 'Fexp0.25_gray'),
+        (Fexp(1, FloatEncoder(0.0, 10.23, 10)), 'Fexp1'),
+        (Fexp(1, FloatEncoder(0.0, 10.23, 10, is_gray=True)), 'Fexp1_gray'),
+        (Fexp(2, FloatEncoder(0.0, 10.23, 10)), 'Fexp2'),
+        (Fexp(2, FloatEncoder(0.0, 10.23, 10, is_gray=True)), 'Fexp2_gray'),
+        (Frastr(7, FloatEncoder(-5.12, 5.11, 10)), 'Frastr'),
+        (Frastr(7, FloatEncoder(-5.12, 5.11, 10, is_gray=True)), 'Frastr_gray'),
+        (Fdeb2(FloatEncoder(0, 1.023, 10)), 'Fdeb2'),
+        (Fdeb2(FloatEncoder(0, 1.023, 10, is_gray=True)), 'Fdeb2_gray'),
+        (Fdeb4(FloatEncoder(0, 1.023, 10)), 'Fdeb4'),
+        (Fdeb4(FloatEncoder(0, 1.023, 10, is_gray=True)), 'Fdeb4_gray'),
     ]
     selection_methods = [
-        (LinearRankingRWS(beta_values[0]), 'RWS_linear_par1'),
-        # (ExponentialRankingRWS(c_values[0]), 'RWS_exponential_par1'),
-        # (LinearRankingModifiedRWS(beta_value_modified), 'RWS_linear_modified'),
+        (TS(2, p10, True), 'TS_1_replacement'),
+        (TS(2, p08, True), 'TS_0.8_replacement'),
+        (TS(2, p06, True), 'TS_0.6_replacement'),
+        (TS(2, pxi, True), 'TS_f_replacement'),
+        (TS(2, p10, False), 'TS_1_noreplacement'),
+        (TS(2, p08, False), 'TS_0.8_noreplacement'),
+        (TS(2, p06, False), 'TS_0.6_noreplacement'),
+        (TS(2, pxi, False), 'TS_f_noreplacement')
     ]
     gen_operators = [
         (BlankGenOperator, 'no_operators')
@@ -71,14 +80,14 @@ else:
         (Fdeb4(FloatEncoder(0, 1.023, 10, is_gray=True)), 'Fdeb4_gray'),
     ]
     selection_methods = [
-        (LinearRankingRWS(beta_values[0]), 'RWS_linear_par1'),
-        (LinearRankingRWS(beta_values[1]), 'RWS_linear_par2'),
-        (LinearRankingRWS(beta_values[2]), 'RWS_linear_par3'),
-        (ExponentialRankingRWS(c_values[0]), 'RWS_exponential_par1'),
-        (ExponentialRankingRWS(c_values[1]), 'RWS_exponential_par2'),
-        (ExponentialRankingRWS(c_values[2]), 'RWS_exponential_par3'),
-        (ExponentialRankingRWS(c_values[3]), 'RWS_exponential_par4'),
-        (LinearRankingModifiedRWS(beta_value_modified), 'RWS_linear_modified'),
+        (TS(2, p10, True), 'TS_1_replacement'),
+        (TS(2, p08, True), 'TS_0.8_replacement'),
+        (TS(2, p06, True), 'TS_0.6_replacement'),
+        (TS(2, pxi, True), 'TS_f_replacement'),
+        (TS(2, p10, False), 'TS_1_noreplacement'),
+        (TS(2, p08, False), 'TS_0.8_noreplacement'),
+        (TS(2, p06, False), 'TS_0.6_noreplacement'),
+        (TS(2, pxi, False), 'TS_f_noreplacement')
     ]
     gen_operators = [
         (BlankGenOperator, 'no_operators'),
@@ -120,21 +129,21 @@ if __name__ == '__main__':
     results = []
 
     experiment_stats_list = []
-    for ff, no in experiment_params:
+    for ff, no in itertools.product(fitness_functions, num_optimal):
         ff_start_time = time.time()
 
-        populations = generate_all_populations_for_fitness_function(ff, no)
-        params = [params + (populations,) for params in experiment_params[(ff, no)]]
+        populations = generate_all_populations_for_fitness_function(ff[0], no[0])
+        params = [params + (populations,) for params in experiment_params[(ff[0], no[0])]]
         experiment_stats_list += [run_experiment(*p) for p in params]
 
-        if no == num_optimal[-1][0]:
+        if no[0] == num_optimal[-1][0]:
             excel.write_ff_stats(experiment_stats_list)
             for experiment_stats in experiment_stats_list:
                 del experiment_stats.runs
                 results.append(experiment_stats)
 
             ff_end_time = time.time()
-            ff_name = experiment_params[(ff, no)][0][2][0]
+            ff_name = experiment_params[(ff[0], no[0])][0][2][0]
             log(f'{ff_name} experiments finished in {(ff_end_time - ff_start_time):.2f}s')
             experiment_stats_list = []
 
