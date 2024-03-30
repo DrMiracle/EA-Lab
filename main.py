@@ -1,3 +1,5 @@
+import itertools
+
 from config import env, NR, N
 from model.fitness_functions import *
 from selection.rws import *
@@ -120,11 +122,11 @@ if __name__ == '__main__':
     results = []
 
     experiment_stats_list = []
-    for ff, no in experiment_params:
+    for ff, no in itertools.product(fitness_functions, num_optimal):
         ff_start_time = time.time()
 
-        populations = generate_all_populations_for_fitness_function(ff, no)
-        params = [params + (populations,) for params in experiment_params[(ff, no)]]
+        populations = generate_all_populations_for_fitness_function(ff[0], no[0])
+        params = [params + (populations,) for params in experiment_params[(ff[0], no[0])]]
         experiment_stats_list += [run_experiment(*p) for p in params]
 
         if no == num_optimal[-1][0]:
@@ -134,7 +136,7 @@ if __name__ == '__main__':
                 results.append(experiment_stats)
 
             ff_end_time = time.time()
-            ff_name = experiment_params[(ff, no)][0][2][0]
+            ff_name = experiment_params[(ff[0], no[0])][0][2][0]
             log(f'{ff_name} experiments finished in {(ff_end_time - ff_start_time):.2f}s')
             experiment_stats_list = []
 
