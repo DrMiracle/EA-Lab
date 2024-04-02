@@ -19,12 +19,12 @@ beta_value_modified = 1.4
 
 if env == 'test':
     fitness_functions = [
-        # (FconstALL(100), 'FconstALL'),
+        (FconstALL(100), 'FconstALL'),
         (FH(Encoder(100)), 'FH'),
-        # (Fx2(FloatEncoder(0.0, 10.23, 10)), 'Fx2'),
-        # (Fx2(FloatEncoder(0.0, 10.23, 10, is_gray=True)), 'Fx2_gray'),
-        # (F5122subx2(FloatEncoder(-5.12, 5.11, 10)), 'F5122subx2'),
-        # (F5122subx2(FloatEncoder(-5.12, 5.11, 10, is_gray=True)), 'F5122subx2_gray'),
+        (Fx2(FloatEncoder(0.0, 10.23, 10)), 'Fx2'),
+        (Fx2(FloatEncoder(0.0, 10.23, 10, is_gray=True)), 'Fx2_gray'),
+        #(F5122subx2(FloatEncoder(-5.12, 5.11, 10)), 'F5122subx2'),
+        #(F5122subx2(FloatEncoder(-5.12, 5.11, 10, is_gray=True)), 'F5122subx2_gray'),
         # (Fexp(0.25, FloatEncoder(0.0, 10.23, 10)), 'Fexp0.25'),
         # (Fexp(0.25, FloatEncoder(0.0, 10.23, 10, is_gray=True)), 'Fexp0.25_gray'),
         # (Fexp(1, FloatEncoder(0.0, 10.23, 10)), 'Fexp1'),
@@ -33,8 +33,8 @@ if env == 'test':
         # (Fexp(2, FloatEncoder(0.0, 10.23, 10, is_gray=True)), 'Fexp2_gray'),
         # (Frastr(7, FloatEncoder(-5.12, 5.11, 10)), 'Frastr'),
         # (Frastr(7, FloatEncoder(-5.12, 5.11, 10, is_gray=True)), 'Frastr_gray'),
-        # (Fdeb2(FloatEncoder(0, 1.023, 10)), 'Fdeb2'),
-        # (Fdeb2(FloatEncoder(0, 1.023, 10, is_gray=True)), 'Fdeb2_gray'),
+        #(Fdeb2(FloatEncoder(0, 1.023, 10)), 'Fdeb2'),
+        #(Fdeb2(FloatEncoder(0, 1.023, 10, is_gray=True)), 'Fdeb2_gray'),
         # (Fdeb4(FloatEncoder(0, 1.023, 10)), 'Fdeb4'),
         # (Fdeb4(FloatEncoder(0, 1.023, 10, is_gray=True)), 'Fdeb4_gray'),
     ]
@@ -122,6 +122,7 @@ if __name__ == '__main__':
     results = []
 
     experiment_stats_list = []
+
     for ff, no in itertools.product(fitness_functions, num_optimal):
         ff_start_time = time.time()
 
@@ -129,7 +130,7 @@ if __name__ == '__main__':
         params = [params + (populations,) for params in experiment_params[(ff[0], no[0])]]
         experiment_stats_list += [run_experiment(*p) for p in params]
 
-        if no == num_optimal[-1][0]:
+        if no[0] == num_optimal[-1][0]:
             excel.write_ff_stats(experiment_stats_list)
             for experiment_stats in experiment_stats_list:
                 del experiment_stats.runs

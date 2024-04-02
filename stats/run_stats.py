@@ -26,6 +26,7 @@ class RunStats:
         self.Teta_avg = None
 
         # Selection Intensity
+        self.I_start = None
         self.I_min = None
         self.NI_I_min = None
         self.I_max = None
@@ -40,10 +41,19 @@ class RunStats:
         self.s_avg = None
 
         # Growth Rate
+        self.GR_start = None
         self.GR_early = None
         self.GR_late = None
         self.NI_GR_late = None
         self.GR_avg = None
+
+        # Selection Pressure
+        self.Pr_start = None
+        self.Pr_min = None
+        self.NI_Pr_min = None
+        self.Pr_max = None
+        self.NI_Pr_max = None
+        self.Pr_avg = None
 
 
     def update_stats_for_generation(self, gen_stats: GenerationStats, gen_i):
@@ -73,6 +83,8 @@ class RunStats:
 
         if self.param_names[0] != 'FconstALL':
             # Selection Intensity
+            if self.I_start is None:
+                self.I_start = gen_stats.intensity
             if self.I_min is None or gen_stats.intensity < self.I_min:
                 self.I_min = gen_stats.intensity
                 self.NI_I_min = gen_i
@@ -97,6 +109,8 @@ class RunStats:
                 self.s_avg = (self.s_avg * (gen_i - 1) + gen_stats.difference) / gen_i
 
             # Growth Rate
+            if self.GR_start is None:
+                self.GR_start = gen_stats.growth_rate
             if gen_i == 2:
                 self.GR_early = gen_stats.growth_rate
             if self.GR_late is None and gen_stats.num_of_best >= N / 2:
@@ -106,6 +120,20 @@ class RunStats:
                 self.GR_avg = gen_stats.growth_rate
             else:
                 self.GR_avg = (self.GR_avg * (gen_i - 1) + gen_stats.growth_rate) / gen_i
+
+            # Update Pr_min, NI_Pr_min, Pr_max, NI_Pr_max, and Pr_avg
+            if self.Pr_start is None:
+                self.Pr_start = gen_stats.f_best / gen_stats.f_avg
+            if self.Pr_min is None or gen_stats.f_best / gen_stats.f_avg < self.Pr_min:
+                self.Pr_min = gen_stats.f_best / gen_stats.f_avg
+                self.NI_Pr_min = gen_i
+            if self.Pr_max is None or gen_stats.f_best / gen_stats.f_avg > self.Pr_max:
+                self.Pr_max = gen_stats.f_best / gen_stats.f_avg
+                self.NI_Pr_max = gen_i
+            if self.Pr_avg is None:
+                self.Pr_avg = gen_stats.f_best / gen_stats.f_avg
+            else:
+                self.Pr_avg = (self.Pr_avg * (gen_i - 1) + gen_stats.f_best / gen_stats.f_avg) / gen_i
 
     def update_final_stats(self, gen_stats: GenerationStats, gen_i):
         if self.param_names[0] != 'FconstALL':

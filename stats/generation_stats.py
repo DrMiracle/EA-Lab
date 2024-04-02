@@ -3,6 +3,7 @@ from math import comb, sqrt
 from config import N
 from model.population import Population
 
+
 # stats that are used for graphs
 class GenerationStats:
     def __init__(self, population: Population, param_names: tuple[str]):
@@ -35,7 +36,7 @@ class GenerationStats:
             self.f_best = self.population.get_fitness_max()
             self.num_of_best = self.population.count_fitness_at_least(self.f_best)
             self.optimal_count = self.population.count_optimal_genotype()
-            
+
             if not prev_gen_stats:
                 self.growth_rate = 1
             else:
@@ -44,18 +45,7 @@ class GenerationStats:
 
             self.best_copies_percentage = self.num_of_best / N
 
-            unique_chromosomes = []
-            for i in range(len(self.population.chromosomes)):
-                is_unique = True
-                for j in range(i):
-                    if self.population.chromosomes[i] == self.population.chromosomes[j]:
-                        is_unique = False
-                        break
-                if is_unique:
-                    unique_chromosomes.append(self.population.chromosomes[i])
-                    self.unique_chromosomes_count = len(unique_chromosomes)
-
-            self.unique_chromosomes_count = len(unique_chromosomes)
+            self.unique_chromosomes_count = len(set([tuple(ch.genotype) for ch in self.population.chromosomes]))
 
             if self.f_avg != 0:
                 self.fitness_ratio = self.f_best / self.f_avg
