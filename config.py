@@ -1,10 +1,10 @@
 # environment parameters
-env = 'test'
+env = 'prod'
 THREADS = 16
 
 # run parameters
 N = 20 if env == 'test' else 100
-G = 2500 if env == 'test' else 10000
+G = 2500 if env == 'test' else 10000000
 NR = 10 if env == 'test' else 100
 
 # convergence parameters
@@ -27,7 +27,9 @@ RUN_STATS_NAMES = [
     'I_start', 'I_min', 'NI_I_min', 'I_max', 'NI_I_max', 'I_avg',
     's_min', 'NI_s_min', 's_max', 'NI_s_max', 's_avg',
     'GR_start', 'GR_early', 'GR_late', 'NI_GR_late', 'GR_avg',
-    'Pr_start', 'Pr_min', 'NI_Pr_min', 'Pr_max', 'NI_Pr_max', 'Pr_avg'
+    'Pr_start', 'Pr_min', 'NI_Pr_min', 'Pr_max', 'NI_Pr_max', 'Pr_avg',
+    'Fish_start', 'Fish_min', 'NI_Fish_min', 'Fish_max', 'NI_Fish_max', 'Fish_avg',
+    'Kend_start', 'Kend_min', 'NI_Kend_min', 'Kend_max', 'NI_Kend_max', 'Kend_avg'
 ]
 EXP_STATS_NAMES = [
     'Suc', 'N_Suc', 'Min_NI', 'Max_NI', 'Avg_NI', 'Sigma_NI',
@@ -59,7 +61,17 @@ EXP_STATS_NAMES = [
     'Min_Pr_min', 'NI_Pr_min', 'Max_Pr_max', 'NI_Pr_max',
     'Avg_Pr_min', 'Avg_Pr_max', 'Avg_Pr_avg',
     'Sigma_Pr_max', 'Sigma_Pr_min', 'Sigma_Pr_avg',
-    'Min_Pr_start', 'Max_Pr_start', 'Avg_Pr_start', 'Sigma_Pr_start'
+    'Min_Pr_start', 'Max_Pr_start', 'Avg_Pr_start', 'Sigma_Pr_start',
+
+    'Min_Fish_min', 'NI_Fish_min', 'Max_Fish_max', 'NI_Fish_max',
+    'Avg_Fish_min', 'Avg_Fish_max', 'Avg_Fish_avg',
+    'Sigma_Fish_max', 'Sigma_Fish_min', 'Sigma_Fish_avg',
+    'Min_Fish_start', 'Max_Fish_start', 'Avg_Fish_start', 'Sigma_Fish_start',
+
+    'Min_Kend_min', 'NI_Kend_min', 'Max_Kend_max', 'NI_Kend_max',
+    'Avg_Kend_min', 'Avg_Kend_max', 'Avg_Kend_avg',
+    'Sigma_Kend_max', 'Sigma_Kend_min', 'Sigma_Kend_avg',
+    'Min_Kend_start', 'Max_Kend_start', 'Avg_Kend_start', 'Sigma_Kend_start'
 ]
 FCONSTALL_RUN_STATS_NAMES = [
     'NI',

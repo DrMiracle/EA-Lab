@@ -104,6 +104,38 @@ class ExperimentStats:
         self.Avg_Pr_start = None
         self.Sigma_Pr_start = None
 
+        # Fisher Exact Test
+        self.Min_Fish_min = None
+        self.NI_Fish_min = None
+        self.Max_Fish_max = None
+        self.NI_Fish_max = None
+        self.Avg_Fish_min = None
+        self.Avg_Fish_max = None
+        self.Avg_Fish_avg = None
+        self.Sigma_Fish_max = None
+        self.Sigma_Fish_min = None
+        self.Sigma_Fish_avg = None
+        self.Min_Fish_start = None
+        self.Max_Fish_start = None
+        self.Avg_Fish_start = None
+        self.Sigma_Fish_start = None
+
+        # Kendels Tau
+        self.Min_Kend_min = None
+        self.NI_Kend_min = None
+        self.Max_Kend_max = None
+        self.NI_Kend_max = None
+        self.Avg_Kend_min = None
+        self.Avg_Kend_max = None
+        self.Avg_Kend_avg = None
+        self.Sigma_Kend_max = None
+        self.Sigma_Kend_min = None
+        self.Sigma_Kend_avg = None
+        self.Min_Kend_start = None
+        self.Max_Kend_start = None
+        self.Avg_Kend_start = None
+        self.Sigma_Kend_start = None
+
 
 
     def add_run(self, run: RunStats, run_i):
@@ -123,6 +155,8 @@ class ExperimentStats:
             self.__calculate_i_stats(successful_runs)
             self.__calculate_gr_stats(successful_runs)
             self.__calculate_pr_stats(successful_runs)
+            self.__calculate_fish_stats(successful_runs)
+            self.__clculate_kend_stats(successful_runs)
 
         unsuccessful_converged_runs = [run for run in self.runs if not run.is_successful and run.is_converged]
         self.N_nonSuc = len(unsuccessful_converged_runs)
@@ -286,6 +320,58 @@ class ExperimentStats:
             self.Max_Pr_start = max(Pr_start_list)
             self.Avg_Pr_start = np.mean(Pr_start_list)
             self.Sigma_Pr_start = np.std(Pr_start_list)
+
+    def __calculate_fish_stats(self, runs: list[RunStats]):
+        Fish_min_list = [run.Fish_min for run in runs]
+        Fish_max_list = [run.Fish_max for run in runs]
+        Fish_avg_list = [run.Fish_avg for run in runs]
+        Fish_start_list = [run.Fish_start for run in runs]
+        if Fish_min_list:
+            run_i_Fish_min = np.argmin(Fish_min_list)
+            self.NI_Fish_min = runs[run_i_Fish_min].NI_Fish_min
+            self.Min_Fish_min = Fish_min_list[run_i_Fish_min]
+            self.Avg_Fish_min = np.mean(Fish_min_list)
+            self.Sigma_Fish_min = np.std(Fish_min_list)
+        if Fish_max_list:
+            run_i_Fish_max = np.argmax(Fish_max_list)
+            self.NI_Fish_max = runs[run_i_Fish_max].NI_Fish_max
+            self.Max_Fish_max = Fish_max_list[run_i_Fish_max]
+            self.Avg_Fish_max = np.mean(Fish_max_list)
+            self.Sigma_Fish_max = np.std(Fish_max_list)
+        if Fish_avg_list:
+            self.Avg_Fish_avg = np.mean(Fish_avg_list)
+            self.Sigma_Fish_avg = np.std(Fish_avg_list)
+        if Fish_start_list:
+            self.Min_Fish_start = min(Fish_start_list)
+            self.Max_Fish_start = max(Fish_start_list)
+            self.Avg_Fish_start = np.mean(Fish_start_list)
+            self.Sigma_Fish_start = np.std(Fish_start_list)
+
+    def __clculate_kend_stats(self, runs: list[RunStats]):
+        Kend_min_list = [run.Kend_min for run in runs]
+        Kend_max_list = [run.Kend_max for run in runs]
+        Kend_avg_list = [run.Kend_avg for run in runs]
+        Kend_start_list = [run.Kend_start for run in runs]
+        if Kend_min_list:
+            run_i_Kend_min = np.argmin(Kend_min_list)
+            self.NI_Kend_min = runs[run_i_Kend_min].NI_Kend_min
+            self.Min_Kend_min = Kend_min_list[run_i_Kend_min]
+            self.Avg_Kend_min = np.mean(Kend_min_list)
+            self.Sigma_Kend_min = np.std(Kend_min_list)
+        if Kend_max_list:
+            run_i_Kend_max = np.argmax(Kend_max_list)
+            self.NI_Kend_max = runs[run_i_Kend_max].NI_Kend_max
+            self.Max_Kend_max = Kend_max_list[run_i_Kend_max]
+            self.Avg_Kend_max = np.mean(Kend_max_list)
+            self.Sigma_Kend_max = np.std(Kend_max_list)
+        if Kend_avg_list:
+            self.Avg_Kend_avg = np.mean(Kend_avg_list)
+            self.Sigma_Kend_avg = np.std(Kend_avg_list)
+        if Kend_start_list:
+            self.Min_Kend_start = min(Kend_start_list)
+            self.Max_Kend_start = max(Kend_start_list)
+            self.Avg_Kend_start = np.mean(Kend_start_list)
+            self.Sigma_Kend_start = np.std(Kend_start_list)
 
 
 def __str__(self):
