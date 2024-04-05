@@ -26,6 +26,7 @@ class RunStats:
         self.Teta_avg = None
 
         # Selection Intensity
+        self.I_start = None
         self.I_min = None
         self.NI_I_min = None
         self.I_max = None
@@ -40,10 +41,35 @@ class RunStats:
         self.s_avg = None
 
         # Growth Rate
+        self.GR_start = None
         self.GR_early = None
         self.GR_late = None
         self.NI_GR_late = None
         self.GR_avg = None
+
+        # Selection Pressure
+        self.Pr_start = None
+        self.Pr_min = None
+        self.NI_Pr_min = None
+        self.Pr_max = None
+        self.NI_Pr_max = None
+        self.Pr_avg = None
+
+        # Fisher Exact Test
+        self.Fish_start = None
+        self.Fish_min = None
+        self.NI_Fish_min = None
+        self.Fish_max = None
+        self.NI_Fish_max = None
+        self.Fish_avg = None
+
+        # Kendals Tau
+        self.Kend_start = None
+        self.Kend_min = None
+        self.NI_Kend_min = None
+        self.Kend_max = None
+        self.NI_Kend_max = None
+        self.Kend_avg = None
 
 
     def update_stats_for_generation(self, gen_stats: GenerationStats, gen_i):
@@ -57,7 +83,7 @@ class RunStats:
         if self.RR_avg is None:
             self.RR_avg = gen_stats.reproduction_rate
         else:
-            self.RR_avg = (self.RR_avg * (gen_i - 1) + gen_stats.reproduction_rate) / gen_i
+            self.RR_avg = (self.RR_avg * gen_i + gen_stats.reproduction_rate) / (gen_i + 1)
 
         # Loss of Diversity
         if self.Teta_min is None or gen_stats.loss_of_diversity < self.Teta_min:
@@ -69,10 +95,12 @@ class RunStats:
         if self.Teta_avg is None:
             self.Teta_avg = gen_stats.loss_of_diversity
         else:
-            self.Teta_avg = (self.Teta_avg * (gen_i - 1) + gen_stats.loss_of_diversity) / gen_i
+            self.Teta_avg = (self.Teta_avg * gen_i + gen_stats.loss_of_diversity) / (gen_i + 1)
 
         if self.param_names[0] != 'FconstALL':
             # Selection Intensity
+            if self.I_start is None:
+                self.I_start = gen_stats.intensity
             if self.I_min is None or gen_stats.intensity < self.I_min:
                 self.I_min = gen_stats.intensity
                 self.NI_I_min = gen_i
@@ -82,7 +110,7 @@ class RunStats:
             if self.I_avg is None:
                 self.I_avg = gen_stats.intensity
             else:
-                self.I_avg = (self.I_avg * (gen_i - 1) + gen_stats.intensity) / gen_i
+                self.I_avg = (self.I_avg * gen_i + gen_stats.intensity) / (gen_i + 1)
 
             # Selection Difference
             if self.s_min is None or gen_stats.difference < self.s_min:
@@ -94,9 +122,11 @@ class RunStats:
             if self.s_avg is None:
                 self.s_avg = gen_stats.difference
             else:
-                self.s_avg = (self.s_avg * (gen_i - 1) + gen_stats.difference) / gen_i
+                self.s_avg = (self.s_avg * gen_i + gen_stats.difference) / (gen_i + 1)
 
             # Growth Rate
+            if self.GR_start is None:
+                self.GR_start = gen_stats.growth_rate
             if gen_i == 2:
                 self.GR_early = gen_stats.growth_rate
             if self.GR_late is None and gen_stats.num_of_best >= N / 2:
@@ -105,7 +135,49 @@ class RunStats:
             if self.GR_avg is None:
                 self.GR_avg = gen_stats.growth_rate
             else:
-                self.GR_avg = (self.GR_avg * (gen_i - 1) + gen_stats.growth_rate) / gen_i
+                self.GR_avg = (self.GR_avg * gen_i + gen_stats.growth_rate) / (gen_i + 1)
+
+            # Update Pr_min, NI_Pr_min, Pr_max, NI_Pr_max, and Pr_avg
+            if self.Pr_start is None:
+                self.Pr_start = gen_stats.f_best / gen_stats.f_avg
+            if self.Pr_min is None or gen_stats.f_best / gen_stats.f_avg < self.Pr_min:
+                self.Pr_min = gen_stats.f_best / gen_stats.f_avg
+                self.NI_Pr_min = gen_i
+            if self.Pr_max is None or gen_stats.f_best / gen_stats.f_avg > self.Pr_max:
+                self.Pr_max = gen_stats.f_best / gen_stats.f_avg
+                self.NI_Pr_max = gen_i
+            if self.Pr_avg is None:
+                self.Pr_avg = gen_stats.f_best / gen_stats.f_avg
+            else:
+                self.Pr_avg = (self.Pr_avg * gen_i + gen_stats.f_best / gen_stats.f_avg) / (gen_i + 1)
+
+            # Fisher Exact Test
+            if self.Fish_start is None:
+                self.Fish_start = gen_stats.fisher_exact_test
+            if self.Fish_min is None or gen_stats.fisher_exact_test < self.Fish_min:
+                self.Fish_min = gen_stats.fisher_exact_test
+                self.NI_Fish_min = gen_i
+            if self.Fish_max is None or gen_stats.fisher_exact_test > self.Fish_max:
+                self.Fish_max = gen_stats.fisher_exact_test
+                self.NI_Fish_max = gen_i
+            if self.Fish_avg is None:
+                self.Fish_avg = gen_stats.fisher_exact_test
+            else:
+                self.Fish_avg = (self.Fish_avg * gen_i + gen_stats.fisher_exact_test) / (gen_i + 1)
+
+            # Kendals Tau
+            if self.Kend_start is None:
+                self.Kend_start = gen_stats.kendalls_tau
+            if self.Kend_min is None or gen_stats.kendalls_tau < self.Kend_min:
+                self.Kend_min = gen_stats.kendalls_tau
+                self.NI_Kend_min = gen_i
+            if self.Kend_max is None or gen_stats.kendalls_tau > self.Kend_max:
+                self.Kend_max = gen_stats.kendalls_tau
+                self.NI_Kend_max = gen_i
+            if  self.Kend_avg is None:
+                self.Kend_avg = gen_stats.kendalls_tau
+            else:
+                self.Kend_avg = (self.Kend_avg * gen_i + gen_stats.kendalls_tau) / (gen_i + 1)
 
     def update_final_stats(self, gen_stats: GenerationStats, gen_i):
         if self.param_names[0] != 'FconstALL':

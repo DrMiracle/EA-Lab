@@ -18,7 +18,7 @@ def write_ff_stats(experiment_stats_list: list[ExperimentStats]):
     if not os.path.exists(path):
         os.makedirs(path)
     
-    workbook = xlsxwriter.Workbook(f'{path}/{filename}')
+    workbook = xlsxwriter.Workbook(f'{path}/{filename}', {"nan_inf_to_errors": True})
     worksheet = workbook.add_worksheet()
     worksheet.name = ff_name
     merge_format = workbook.add_format({
@@ -26,7 +26,7 @@ def write_ff_stats(experiment_stats_list: list[ExperimentStats]):
         'border': 1,
         'align': 'center',
         'fg_color': 'yellow'})
-    worksheet.freeze_panes(2, 2)
+    worksheet.freeze_panes(2, 3)
     
     for exp_i, experiment_stats in enumerate(experiment_stats_list):
         row = exp_i + 2
@@ -69,7 +69,7 @@ def write_aggregated_stats(experiment_stats_list: list[ExperimentStats]):
     if not os.path.exists(path):
         os.makedirs(path)
 
-    workbook = xlsxwriter.Workbook(f'{path}/{filename}')
+    workbook = xlsxwriter.Workbook(f'{path}/{filename}', {"nan_inf_to_errors": True})
     worksheet = workbook.add_worksheet()
     worksheet.name = 'aggregated'
     worksheet.freeze_panes(1, 3)

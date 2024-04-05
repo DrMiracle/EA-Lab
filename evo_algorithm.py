@@ -60,8 +60,8 @@ class EvoAlgorithm:
             self.gen_stats_list.append(gen_stats)
 
         gen_stats.calculate_stats_before_selection(self.prev_gen_stats)
-        self.selection_method.select(self.population)
-        gen_stats.calculate_stats_after_selection()
+        num_offsprings = self.selection_method.select(self.population)
+        gen_stats.calculate_stats_after_selection(num_offsprings)
         self.run_stats.update_stats_for_generation(gen_stats, self.gen_i)
         self.genetic_operator.apply(self.population)
 

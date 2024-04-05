@@ -15,49 +15,55 @@ class TS(SelectionMethod):
 
     def select(self, population: Population):
         if self.replacement:
-            mating_pool = self.tournament_with_replacement(population)
+            num_offsprings, mating_pool = self.tournament_with_replacement(population)
         else:
-            mating_pool = self.tournament(population)
+            num_offsprings, mating_pool = self.tournament(population)
 
         population.update_chromosomes(mating_pool)
+
+        return num_offsprings
 
 
 
     def tournament(self, population: Population):
+        num_offsprings = [0 for _ in range(len(population.chromosomes))]
         mating_pool = []
 
         copy_population = deepcopy(population)
-        chromosomes = copy_population.chromosomes
+        chromosomes = [(i, ch) for i, ch in enumerate(copy_population.chromosomes)]
         np.random.shuffle(chromosomes)
         while len(mating_pool) < N:
-            contestants = [np.random.choice(chromosomes) for _ in range(self.t)]
+            contestants = [chromosomes[np.random.randint(0, len(chromosomes))] for _ in range(self.t)]
 
-            fitnesses = [ch.fitness for ch in contestants]
+            fitnesses = [ch[1].fitness for ch in contestants]
             winner_i = np.argmax(fitnesses)
             if np.random.rand() < self.p(fitnesses):
-                    mating_pool.append(contestants[winner_i])
+                    num_offsprings[contestants[winner_i][0]] += 1
+                    mating_pool.append(contestants[winner_i][1])
 
-        return mating_pool
+        return num_offsprings, mating_pool
 
 
 
     def tournament_with_replacement(self, population: Population):
+        num_offsprings = [0 for _ in range(len(population.chromosomes))]
         mating_pool = []
 
         while len(mating_pool) < N:
             copy_population = deepcopy(population)
-            chromosomes = copy_population.chromosomes
+            chromosomes = [(i, ch) for i, ch in enumerate(copy_population.chromosomes)]
             np.random.shuffle(chromosomes)
             while len(chromosomes) > 0:
                 contestants = chromosomes[:self.t]
                 chromosomes = chromosomes[self.t:]
 
-                fitnesses = [ch.fitness for ch in contestants]
+                fitnesses = [ch[1].fitness for ch in contestants]
                 winner_i = np.argmax(fitnesses)
                 if np.random.rand() < self.p(fitnesses):
-                    mating_pool.append(contestants[winner_i])
+                    num_offsprings[contestants[winner_i][0]] += 1
+                    mating_pool.append(contestants[winner_i][1])
                     if len(mating_pool) >= N:
                         break
 
-        return mating_pool
+        return num_offsprings, mating_pool
 
