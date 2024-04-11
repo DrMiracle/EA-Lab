@@ -35,6 +35,12 @@ class ExperimentStats:
         self.Sigma_RR_min = None
         self.Sigma_RR_max = None
         self.Sigma_RR_avg = None
+        self.Min_RR_start = None
+        self.Max_RR_start = None
+        self.Avg_RR_start = None
+        self.Sigma_RR_start = None
+        self.Avg_RR_fin = None
+        self.Sigma_RR_fin = None
 
         # Loss of Diversity
         self.Min_Teta_min = None
@@ -47,6 +53,12 @@ class ExperimentStats:
         self.Sigma_Teta_min = None
         self.Sigma_Teta_max = None
         self.Sigma_Teta_avg = None
+        self.Min_Teta_start = None
+        self.Max_Teta_start = None
+        self.Avg_Teta_start = None
+        self.Sigma_Teta_start = None
+        self.Avg_Teta_fin = None
+        self.Sigma_Teta_fin = None
 
         # Selection Intensity
         self.Min_I_min = None
@@ -72,6 +84,10 @@ class ExperimentStats:
         self.Avg_s_min = None
         self.Avg_s_max = None
         self.Avg_s_avg = None
+        self.Min_s_start = None
+        self.Max_s_start = None
+        self.Avg_s_start = None
+        self.Sigma_s_start = None
 
         # Growth Rate
         self.Min_GR_early = None
@@ -208,6 +224,16 @@ class ExperimentStats:
         if RR_avg_list:
             self.Avg_RR_avg = np.mean(RR_avg_list)
             self.Sigma_RR_avg = np.std(RR_avg_list)
+        RR_start_list = [run.RR_start for run in runs]
+        if RR_start_list:
+            self.Min_RR_start = min(RR_start_list)
+            self.Max_RR_start = max(RR_start_list)
+            self.Avg_RR_start = np.mean(RR_start_list)
+            self.Sigma_RR_start = np.std(RR_start_list)
+        RR_fin_list = [run.RR_fin for run in runs]
+        if RR_fin_list:
+            self.Avg_RR_fin = np.mean(RR_fin_list)
+            self.Sigma_RR_fin = np.std(RR_fin_list)
 
     def __calculate_teta_stats(self, runs: list[RunStats]):
         Teta_min_list = [run.Teta_min for run in runs]
@@ -228,6 +254,16 @@ class ExperimentStats:
         if Teta_avg_list:
             self.Avg_Teta_avg = np.mean(Teta_avg_list)
             self.Sigma_Teta_avg = np.std(Teta_avg_list)
+        Teta_start_list = [run.Teta_start for run in runs]
+        if Teta_start_list:
+            self.Min_Teta_start = min(Teta_start_list)
+            self.Max_Teta_start = max(Teta_start_list)
+            self.Avg_Teta_start = np.mean(Teta_start_list)
+            self.Sigma_Teta_start = np.std(Teta_start_list)
+        Teta_fin_list = [run.Teta_fin for run in runs]
+        if Teta_fin_list:
+            self.Avg_Teta_fin = np.mean(Teta_fin_list)
+            self.Sigma_Teta_fin = np.std(Teta_fin_list)
 
     def __calculate_s_stats(self, runs: list[RunStats]):
         s_min_list = [run.s_min for run in runs]
@@ -245,6 +281,12 @@ class ExperimentStats:
         s_avg_list = [run.s_avg for run in runs]
         if s_avg_list:
             self.Avg_s_avg = np.mean(s_avg_list)
+        s_start_list = [run.s_start for run in runs]
+        if s_start_list:
+            self.Min_s_start = min(s_start_list)
+            self.Max_s_start = max(s_start_list)
+            self.Avg_s_start = np.mean(s_start_list)
+            self.Sigma_s_start = np.std(s_start_list)
 
     def __calculate_i_stats(self, runs: list[RunStats]):
         I_min_list = [run.I_min for run in runs]

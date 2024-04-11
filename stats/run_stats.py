@@ -17,6 +17,8 @@ class RunStats:
         self.RR_max = None
         self.NI_RR_max = None
         self.RR_avg = None
+        self.RR_start = None
+        self.RR_fin = None
 
         # Loss of Diversity
         self.Teta_min = None
@@ -24,6 +26,8 @@ class RunStats:
         self.Teta_max = None
         self.NI_Teta_max = None
         self.Teta_avg = None
+        self.Teta_start = None
+        self.Teta_fin = None
 
         # Selection Intensity
         self.I_start = None
@@ -39,6 +43,7 @@ class RunStats:
         self.s_max = None
         self.NI_s_max = None
         self.s_avg = None
+        self.s_start = None
 
         # Growth Rate
         self.GR_start = None
@@ -74,6 +79,9 @@ class RunStats:
 
     def update_stats_for_generation(self, gen_stats: GenerationStats, gen_i):
         # Reproduction Rate
+        if self.RR_start is None:
+            self.RR_start = gen_stats.reproduction_rate
+        self.RR_fin = gen_stats.reproduction_rate
         if self.RR_min is None or gen_stats.reproduction_rate < self.RR_min:
             self.RR_min = gen_stats.reproduction_rate
             self.NI_RR_min = gen_i
@@ -86,6 +94,9 @@ class RunStats:
             self.RR_avg = (self.RR_avg * gen_i + gen_stats.reproduction_rate) / (gen_i + 1)
 
         # Loss of Diversity
+        if self.Teta_start is None:
+            self.Teta_start = gen_stats.loss_of_diversity
+        self.Teta_fin = gen_stats.loss_of_diversity
         if self.Teta_min is None or gen_stats.loss_of_diversity < self.Teta_min:
             self.Teta_min = gen_stats.loss_of_diversity
             self.NI_Teta_min = gen_i
@@ -96,6 +107,7 @@ class RunStats:
             self.Teta_avg = gen_stats.loss_of_diversity
         else:
             self.Teta_avg = (self.Teta_avg * gen_i + gen_stats.loss_of_diversity) / (gen_i + 1)
+
 
         if self.param_names[0] != 'FconstALL':
             # Selection Intensity
@@ -113,6 +125,8 @@ class RunStats:
                 self.I_avg = (self.I_avg * gen_i + gen_stats.intensity) / (gen_i + 1)
 
             # Selection Difference
+            if self.s_start is None:
+                self.s_start = gen_stats.difference
             if self.s_min is None or gen_stats.difference < self.s_min:
                 self.s_min = gen_stats.difference
                 self.NI_s_min = gen_i
