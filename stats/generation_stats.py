@@ -57,6 +57,8 @@ class GenerationStats:
             else:
                 self.fitness_ratio = float('inf')
 
+            self.fitnesses_before_selection = [ch.fitness for ch in self.population.chromosomes]
+
 
     def calculate_stats_after_selection(self, num_offsprings: list):
         ids_after_selection = set(self.population.get_ids())
@@ -72,20 +74,20 @@ class GenerationStats:
             else:
                 self.intensity = self.difference / self.f_std
 
-        fit_median = np.median(self.fitnesses_before_selection)
-        child_median = np.median(num_offsprings)
-        con_matrix = [[len([True for f, c in zip(self.fitnesses_before_selection, num_offsprings) if
-                            f <= fit_median and c <= child_median]),
-                       len([True for f, c in zip(self.fitnesses_before_selection, num_offsprings) if
-                            f > fit_median and c <= child_median])],
-                      [len([True for f, c in zip(self.fitnesses_before_selection, num_offsprings) if
-                            f <= fit_median and c > child_median]),
-                       len([True for f, c in zip(self.fitnesses_before_selection, num_offsprings) if
-                            f > fit_median and c > child_median])]]
-        _, self.fisher_exact_test = fisher_exact(con_matrix)
-        if self.fisher_exact_test > 1:
-            print("fisher is inf")
-        self.kendalls_tau, _ = kendalltau(self.fitnesses_before_selection, num_offsprings)
-        if self.kendalls_tau > 1:
-            print("kendal is inf")
+            fit_median = np.median(self.fitnesses_before_selection)
+            child_median = np.median(num_offsprings)
+            con_matrix = [[len([True for f, c in zip(self.fitnesses_before_selection, num_offsprings) if
+                                f <= fit_median and c <= child_median]),
+                           len([True for f, c in zip(self.fitnesses_before_selection, num_offsprings) if
+                                f > fit_median and c <= child_median])],
+                          [len([True for f, c in zip(self.fitnesses_before_selection, num_offsprings) if
+                                f <= fit_median and c > child_median]),
+                           len([True for f, c in zip(self.fitnesses_before_selection, num_offsprings) if
+                                f > fit_median and c > child_median])]]
+            _, self.fisher_exact_test = fisher_exact(con_matrix)
+            if self.fisher_exact_test > 1:
+                print("fisher is inf")
+            self.kendalls_tau, _ = kendalltau(self.fitnesses_before_selection, num_offsprings)
+            if self.kendalls_tau > 1:
+                print("kendal is inf")
 
