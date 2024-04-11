@@ -119,6 +119,10 @@ class RunStats:
         else:
             self.Teta_avg = (self.Teta_avg * gen_i + gen_stats.loss_of_diversity) / (gen_i + 1)
 
+        # X
+        if self.unique_X_start is None:
+            self.unique_X_start = gen_stats.unique_chromosomes_count
+        self.unique_X_fin = gen_stats.unique_chromosomes_count
 
         if self.param_names[0] != 'FconstALL':
             # Selection Intensity
@@ -216,10 +220,6 @@ class RunStats:
                 if self.MaxOptSaved_NI_loose < gen_stats.optimal_count:
                     self.MaxOptSaved_NI_loose = gen_stats.optimal_count
 
-            # X
-            if self.unique_X_start is None:
-                self.unique_X_start = gen_stats.unique_chromosomes_count
-            self.unique_X_fin = gen_stats.unique_chromosomes_count
 
     def update_final_stats(self, gen_stats: GenerationStats, gen_i):
         if self.param_names[0] != 'FconstALL':
