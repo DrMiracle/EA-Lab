@@ -76,6 +76,17 @@ class RunStats:
         self.NI_Kend_max = None
         self.Kend_avg = None
 
+        # Loose
+        self.loose = False
+        self.NI_loose = 0
+        self.Num_loose = 0
+        self.optSaved_NI_loose = None
+        self.MaxOptSaved_NI_loose = 0
+
+        # X
+        self.unique_X_start = None
+        self.unique_X_fin = None
+
 
     def update_stats_for_generation(self, gen_stats: GenerationStats, gen_i):
         # Reproduction Rate
@@ -192,6 +203,23 @@ class RunStats:
                 self.Kend_avg = gen_stats.kendalls_tau
             else:
                 self.Kend_avg = (self.Kend_avg * gen_i + gen_stats.kendalls_tau) / (gen_i + 1)
+
+            # Loose
+            if gen_stats.optimal_count > 0 and self.loose:
+                self.loose = False
+            if gen_stats.optimal_count == 0 and not self.loose:
+                self.NI_loose = gen_i
+                self.Num_loose += 1
+                self.loose = True
+            if not self.loose:
+                self.optSaved_NI_loose = gen_stats.optimal_count
+                if self.MaxOptSaved_NI_loose < gen_stats.optimal_count:
+                    self.MaxOptSaved_NI_loose = gen_stats.optimal_count
+
+            # X
+            if self.unique_X_start is None:
+                self.unique_X_start = gen_stats.unique_chromosomes_count
+            self.unique_X_fin = gen_stats.unique_chromosomes_count
 
     def update_final_stats(self, gen_stats: GenerationStats, gen_i):
         if self.param_names[0] != 'FconstALL':

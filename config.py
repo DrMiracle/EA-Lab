@@ -4,8 +4,8 @@ THREADS = 16
 
 # run parameters
 N = 20 if env == 'test' else 100
-G = 2500 if env == 'test' else 10000000
-NR = 10 if env == 'test' else 100
+G = 10000 if env == 'test' else 10000000
+NR = 100 if env == 'test' else 100
 
 # convergence parameters
 EPS = 0.0001
@@ -24,12 +24,14 @@ RUN_STATS_NAMES = [
     'NI', 'F_found', 'F_avg',
     'RR_start', 'RR_min', 'NI_RR_min', 'RR_max', 'NI_RR_max', 'RR_avg', 'RR_fin',
     'Teta_start', 'Teta_min', 'NI_Teta_min', 'Teta_max', 'NI_Teta_max', 'Teta_avg', 'Teta_fin',
-    'I_start', 'I_min', 'NI_I_min', 'I_max', 'NI_I_max', 'I_avg',
+    'I_min', 'NI_I_min', 'I_max', 'NI_I_max', 'I_avg',
     's_start', 's_min', 'NI_s_min', 's_max', 'NI_s_max', 's_avg',
-    'GR_start', 'GR_early', 'GR_late', 'NI_GR_late', 'GR_avg',
+    'GR_early', 'GR_late', 'NI_GR_late', 'GR_avg',
     'Pr_start', 'Pr_min', 'NI_Pr_min', 'Pr_max', 'NI_Pr_max', 'Pr_avg',
     'Fish_start', 'Fish_min', 'NI_Fish_min', 'Fish_max', 'NI_Fish_max', 'Fish_avg',
-    'Kend_start', 'Kend_min', 'NI_Kend_min', 'Kend_max', 'NI_Kend_max', 'Kend_avg'
+    'Kend_start', 'Kend_min', 'NI_Kend_min', 'Kend_max', 'NI_Kend_max', 'Kend_avg',
+    'NI_loose', 'Num_loose', 'optSaved_NI_loose', 'MaxOptSaved_NI_loose',
+    'unique_X_start', 'unique_X_fin'
 ]
 EXP_STATS_NAMES = [
     'Suc', 'N_Suc', 'Min_NI', 'Max_NI', 'Avg_NI', 'Sigma_NI',
@@ -52,7 +54,6 @@ EXP_STATS_NAMES = [
     'Min_I_min', 'NI_I_min', 'Max_I_max', 'NI_I_max',
     'Avg_I_min', 'Avg_I_max', 'Avg_I_avg',
     'Sigma_I_min', 'Sigma_I_max', 'Sigma_I_avg',
-    'Min_I_start', 'Max_I_start', 'Avg_I_start', 'Sigma_I_start',
 
     'Min_s_min', 'NI_s_min', 'Max_s_max', 'NI_s_max',
     'Avg_s_min', 'Avg_s_max', 'Avg_s_avg',
@@ -61,7 +62,6 @@ EXP_STATS_NAMES = [
     'Min_GR_early', 'Max_GR_early', 'Avg_GR_early',
     'Min_GR_late', 'Max_GR_late', 'Avg_GR_late',
     'Min_GR_avg', 'Max_GR_avg', 'Avg_GR_avg',
-    'Min_GR_start', 'Max_GR_start', 'Avg_GR_start', 'Sigma_GR_start',
 
     'Min_Pr_min', 'NI_Pr_min', 'Max_Pr_max', 'NI_Pr_max',
     'Avg_Pr_min', 'Avg_Pr_max', 'Avg_Pr_avg',
@@ -76,7 +76,15 @@ EXP_STATS_NAMES = [
     'Min_Kend_min', 'NI_Kend_min', 'Max_Kend_max', 'NI_Kend_max',
     'Avg_Kend_min', 'Avg_Kend_max', 'Avg_Kend_avg',
     'Sigma_Kend_max', 'Sigma_Kend_min', 'Sigma_Kend_avg',
-    'Min_Kend_start', 'Max_Kend_start', 'Avg_Kend_start', 'Sigma_Kend_start'
+    'Min_Kend_start', 'Max_Kend_start', 'Avg_Kend_start', 'Sigma_Kend_start',
+
+    'NI_with_Loose', 'Avg_NI_loose', 'Sigma_NI_loose',
+    'Avg_Num_loose', 'Sigma_Num_loose',
+    'Avg_optSaved_NI_loose', 'Sigma_optSaved_NI_loose',
+    'Avg_MaxOptSaved_NI_loose', 'Sigma_MaxOptSaved_NI_loose',
+
+    'Avg_unique_X_start', 'Avg_unique_X_fin', 'Sigma_unique_X_start', 'Sigma_unique_X_fin',
+    'Min_unique_X_start', 'Max_unique_X_start', 'Min_unique_X_fin', 'Max_unique_X_fin',
 ]
 FCONSTALL_RUN_STATS_NAMES = [
     'NI',

@@ -72,7 +72,7 @@ def write_aggregated_stats(experiment_stats_list: list[ExperimentStats]):
     workbook = xlsxwriter.Workbook(f'{path}/{filename}', {"nan_inf_to_errors": True})
     worksheet = workbook.add_worksheet()
     worksheet.name = 'aggregated'
-    worksheet.freeze_panes(1, 3)
+    worksheet.freeze_panes(1, 4)
 
     for exp_i, experiment_stats in enumerate(experiment_stats_list):
         if exp_i == 0:
