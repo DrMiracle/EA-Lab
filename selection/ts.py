@@ -19,6 +19,7 @@ class TS(SelectionMethod):
         else:
             num_offsprings, mating_pool = self.tournament(population)
 
+        np.random.shuffle(mating_pool)
         population.update_chromosomes(mating_pool)
 
         return num_offsprings

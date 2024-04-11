@@ -8,7 +8,7 @@ def write_ff_stats(experiment_stats_list: list[ExperimentStats]):
     path = f'{OUTPUT_FOLDER}/tables/{ff_name}'
     filename = f'{ff_name}_{N}.xlsx'
 
-    if ff_name == 'FconstALL':
+    if ff_name == 'FconstALL_None':
         run_stats_names = FCONSTALL_RUN_STATS_NAMES
         exp_stats_names = FCONSTALL_EXP_STATS_NAMES
     else:
@@ -72,7 +72,7 @@ def write_aggregated_stats(experiment_stats_list: list[ExperimentStats]):
     workbook = xlsxwriter.Workbook(f'{path}/{filename}', {"nan_inf_to_errors": True})
     worksheet = workbook.add_worksheet()
     worksheet.name = 'aggregated'
-    worksheet.freeze_panes(1, 3)
+    worksheet.freeze_panes(1, 4)
 
     for exp_i, experiment_stats in enumerate(experiment_stats_list):
         if exp_i == 0:

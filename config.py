@@ -1,5 +1,5 @@
 # environment parameters
-env = 'prod'
+env = 'test'
 THREADS = 16
 
 # run parameters
@@ -29,7 +29,9 @@ RUN_STATS_NAMES = [
     'GR_early', 'GR_late', 'NI_GR_late', 'GR_avg',
     'Pr_start', 'Pr_min', 'NI_Pr_min', 'Pr_max', 'NI_Pr_max', 'Pr_avg',
     'Fish_start', 'Fish_min', 'NI_Fish_min', 'Fish_max', 'NI_Fish_max', 'Fish_avg',
-    'Kend_start', 'Kend_min', 'NI_Kend_min', 'Kend_max', 'NI_Kend_max', 'Kend_avg'
+    'Kend_start', 'Kend_min', 'NI_Kend_min', 'Kend_max', 'NI_Kend_max', 'Kend_avg',
+    'NI_loose', 'Num_loose', 'optSaved_NI_loose', 'MaxOptSaved_NI_loose',
+    'unique_X_start', 'unique_X_fin'
 ]
 EXP_STATS_NAMES = [
     'Suc', 'N_Suc', 'Min_NI', 'Max_NI', 'Avg_NI', 'Sigma_NI',

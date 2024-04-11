@@ -71,6 +71,17 @@ class RunStats:
         self.NI_Kend_max = None
         self.Kend_avg = None
 
+        # Loose
+        self.NI_loose = 0
+        self.Num_optim_prev = None
+        self.Num_loose = 0
+        self.optSaved_NI_loose = None
+        self.MaxOptSaved_NI_loose = 0
+
+        # X
+        self.unique_X_start = None
+        self.unique_X_fin = None
+
 
     def update_stats_for_generation(self, gen_stats: GenerationStats, gen_i):
         # Reproduction Rate
@@ -97,7 +108,7 @@ class RunStats:
         else:
             self.Teta_avg = (self.Teta_avg * gen_i + gen_stats.loss_of_diversity) / (gen_i + 1)
 
-        if self.param_names[0] != 'FconstALL':
+        if self.param_names[0] != 'FconstALL_None':
             # Selection Intensity
             if self.I_start is None:
                 self.I_start = gen_stats.intensity
@@ -179,8 +190,27 @@ class RunStats:
             else:
                 self.Kend_avg = (self.Kend_avg * gen_i + gen_stats.kendalls_tau) / (gen_i + 1)
 
+            #Loose
+            if gen_stats.optimal_count == 0:
+                self.NI_loose = gen_i
+            self.optSaved_NI_loose = self.Num_optim_prev
+            if self.Num_optim_prev is None:
+                self.Num_optim_prev = gen_stats.optimal_count
+            else:
+                n_l = self.Num_optim_prev - gen_stats.optimal_count
+                self.Num_loose += 0 if n_l < 0 else n_l 
+                self.Num_optim_prev = gen_stats.optimal_count
+            if self.MaxOptSaved_NI_loose < gen_stats.optimal_count:
+                self.MaxOptSaved_NI_loose = gen_stats.optimal_count 
+            
+            # X
+            if self.unique_X_start is None:
+                self.unique_X_start = gen_stats.unique_chromosomes_count
+            self.unique_X_fin = gen_stats.unique_chromosomes_count
+
+
     def update_final_stats(self, gen_stats: GenerationStats, gen_i):
-        if self.param_names[0] != 'FconstALL':
+        if self.param_names[0] != 'FconstALL_None':
             self.F_found = gen_stats.f_best
             self.F_avg = gen_stats.f_avg
 

@@ -14,7 +14,7 @@ def plot_run_stats(
     losses_of_diversity = [gen_stats.loss_of_diversity for gen_stats in gen_stats_list if gen_stats.loss_of_diversity is not None]
     __plot_stat2(reproduction_rates, losses_of_diversity, param_names, run_i, 'Reproduction Rate', 'Loss of Diversity', 'rr_and_lod')
 
-    if param_names[0] != 'FconstALL':
+    if param_names[0] != 'FconstALL_None':
         f_avgs = [gen_stats.f_avg for gen_stats in gen_stats_list]
         __plot_stat(f_avgs, param_names, run_i, 'Fitness Average', 'f_avg')
 
