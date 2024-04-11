@@ -13,6 +13,9 @@ def plot_run_stats(
     reproduction_rates = [gen_stats.reproduction_rate for gen_stats in gen_stats_list if gen_stats.reproduction_rate is not None]
     losses_of_diversity = [gen_stats.loss_of_diversity for gen_stats in gen_stats_list if gen_stats.loss_of_diversity is not None]
     __plot_stat2(reproduction_rates, losses_of_diversity, param_names, run_i, 'Reproduction Rate', 'Loss of Diversity', 'rr_and_lod')
+    
+    unique_chromosomes = [gen_stats.unique_chromosomes_count for gen_stats in gen_stats_list]
+    __plot_stat(unique_chromosomes, param_names, run_i, 'Unique Chromosomes Count', 'unique_chromosomes_count')
 
     if param_names[0] != 'FconstALL':
         f_avgs = [gen_stats.f_avg for gen_stats in gen_stats_list]
@@ -42,9 +45,6 @@ def plot_run_stats(
 
         best_copies = [gen_stats.best_copies_percentage for gen_stats in gen_stats_list]
         __plot_stat(best_copies, param_names, run_i, 'Best Chromosome Copies Percentage', 'best_copies_percentage')
-
-        unique_chromosomes = [gen_stats.unique_chromosomes_count for gen_stats in gen_stats_list]
-        __plot_stat(unique_chromosomes, param_names, run_i, 'Unique Chromosomes Count', 'unique_chromosomes_count')
 
         fitness_ratio = [gen_stats.fitness_ratio for gen_stats in gen_stats_list]
         __plot_stat(fitness_ratio, param_names, run_i, 'Fitness Ratio (f_max / f_avg)', 'fitness_ratio')
