@@ -58,6 +58,7 @@ class EvoAlgorithm:
         if run_i < RUNS_TO_PLOT:
             plotting.plot_generation_stats(self.population, self.param_names, run_i, self.gen_i)
             plotting.plot_run_stats(self.gen_stats_list, self.param_names, run_i)
+            excel.write_generation_stats(self.gen_stats_list, self.param_names, run_i)
 
         return self.run_stats
 

@@ -50,13 +50,13 @@ if env == 'test':
     ]
     gen_operators = [
         (BlankGenOperator, 'no_operators'),
-        (Crossover, 'crossover'),
-        (Mutation, 'mutation'),
+        # (Crossover, 'crossover'),
+        # (Mutation, 'mutation'),
         (CrossoverAndMutation, 'crossover_mut')
     ]
     num_optimal = [
         (0, "no_optim"),
-        (1, "1_optim"),
+        # (1, "1_optim"),
         (int(N/20), "5per_optim"),
         # (int(N/10), "10per_optim")
     ]

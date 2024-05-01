@@ -441,6 +441,7 @@ class ExperimentStats:
     def __calculate_loose_stats(self, runs: list[RunStats]):
         with_loose = [r for r in runs if r.Num_loose > 0]
         if with_loose:
+            self.NI_with_Loose = len(with_loose)
             lost_NI = [r.NI_loose for r in with_loose]
             if lost_NI:
                 self.Avg_NI_loose = np.mean(lost_NI)

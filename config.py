@@ -10,14 +10,15 @@ NR = 24 if env == 'test' else 100
 # convergence parameters
 EPS = 0.0001
 N_LAST_GENS = 10
-DELTA = SIGMA = 0.01
+DELTA = SIGMA = 0
 
 # algorithm parameters
 get_p_m = lambda l: 0.1 / l / N
 get_pop_seed = lambda run_i: 1381*run_i + 5912826
 
 # output parameters
-DISTRIBUTIONS_TO_PLOT = 5
+ITER_TO_PLOT = 50
+DISTRIBUTIONS_TO_PLOT = 4
 RUNS_TO_PLOT = 5
 OUTPUT_FOLDER = 'out_test' if env == 'test' else 'out'
 
@@ -105,4 +106,12 @@ FCONSTALL_EXP_STATS_NAMES = [
     'Min_Teta_min', 'NI_Teta_min', 'Max_Teta_max', 'NI_Teta_max',
     'Avg_Teta_min', 'Avg_Teta_max', 'Avg_Teta_avg',
     'Sigma_Teta_min', 'Sigma_Teta_max', 'Sigma_Teta_avg'
+]
+
+GEN_STATS_NAMES = [
+    'f_avg', 'f_std', 'f_best', 'num_of_best', 'optimal_count', 'growth_rate', 'difference',
+    'intensity', 'reproduction_rate', 'loss_of_diversity', 'unique_chromosomes_count', "fisher_exact_test", "kendalls_tau"
+]
+FCONSTALL_GEN_STATS_NAMES = [
+    'reproduction_rate', 'loss_of_diversity', 'unique_chromosomes_count'
 ]

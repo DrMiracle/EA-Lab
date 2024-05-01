@@ -97,68 +97,48 @@ def write_aggregated_stats(experiment_stats_list: list[ExperimentStats]):
 
     workbook.close()
 
-# def write_generation_stats(generation_stats_list, param_names, run_i):
-#     """
-#     Write statistics of a generation to excel
-#     :param generation_stats_list: list of generation statistics
-#     :param param_names: list of parameters, defining the path
-#     :param run_i: number of the run of the GA
-#     """
-#     path = __get_path_hierarchy(param_names, run_i)
-#     path = os.path.join(*path)
-#     os.makedirs(path, exist_ok=True)
-#     filename = f'{run_i}.xlsx'
+def write_generation_stats(generation_stats_list, param_names, run_i):
+    path = __get_path_hierarchy(param_names, run_i)
+    path = os.path.join(*path)
+    os.makedirs(path, exist_ok=True)
+    filename = f'run_{run_i}.xlsx'
 
-#     workbook = xlsxwriter.Workbook(os.path.join(path, filename))
-#     worksheet = workbook.add_worksheet()
-#     worksheet.name = f'Run: {run_i}'
-#     worksheet.freeze_panes(1, 1)
+    workbook = xlsxwriter.Workbook(os.path.join(path, filename), {"nan_inf_to_errors": True})
+    worksheet = workbook.add_worksheet()
+    worksheet.name = f'Run: {run_i}'
+    worksheet.freeze_panes(1, 1)
 
-#     worksheet.write(0, 0, 'Generation number')
-#     if param_names[0] != 'FconstALL':
-#         for col in range(len(GEN_STATS_NAMES)):
-#             worksheet.write(0, col + 1, GEN_STATS_NAMES[col])
+    worksheet.write(0, 0, 'Generation number')
+    if param_names[0] != 'FconstALL':
+        for col in range(len(GEN_STATS_NAMES)):
+            worksheet.write(0, col + 1, GEN_STATS_NAMES[col])
 
-#         for i in range(DISTRIBUTIONS_TO_PLOT):
-#             if i >= len(generation_stats_list):
-#                 break
-#             row = i + 1
-#             gen_stats = generation_stats_list[i]
-#             # write generation number
-#             worksheet.write(row, 0, i + 1)
-#             for col in range(len(GEN_STATS_NAMES)):
-#                 value = getattr(gen_stats, GEN_STATS_NAMES[col])
-#                 if GEN_STATS_NAMES[col] == 'growth_rate' and i == 0:
-#                     value = None
-#                 __write_value_with_nan_inf_handling(worksheet, row, col, value)
-#                 # worksheet.write(row, col + 1, getattr(gen_stats, GEN_STATS_NAMES[col]))
-#     else:
-#         for col in range(len(FCONSTALL_GEN_STATS_NAMES)):
-#             worksheet.write(0, col + 1, FCONSTALL_GEN_STATS_NAMES[col])
+        for i in range(ITER_TO_PLOT):
+            if i >= len(generation_stats_list):
+                break
+            row = i + 1
+            gen_stats = generation_stats_list[i]
+            # write generation number
+            worksheet.write(row, 0, i + 1)
+            for col in range(len(GEN_STATS_NAMES)):
+                worksheet.write(row, col + 1, getattr(gen_stats, GEN_STATS_NAMES[col]))
+    else:
+        for col in range(len(FCONSTALL_GEN_STATS_NAMES)):
+            worksheet.write(0, col + 1, FCONSTALL_GEN_STATS_NAMES[col])
 
-#         for i in range(DISTRIBUTIONS_TO_PLOT):
-#             if i >= len(generation_stats_list):
-#                 break
-#             row = i + 1
-#             gen_stats = generation_stats_list[i]
-#             # write generation number
-#             worksheet.write(row, 0, i + 1)
-#             for col in range(len(FCONSTALL_GEN_STATS_NAMES)):
-#                 value = getattr(gen_stats, FCONSTALL_GEN_STATS_NAMES[col])
-#                 __write_value_with_nan_inf_handling(worksheet, row, col, value)
-#                 worksheet.write(row, col + 1, getattr(gen_stats, FCONSTALL_GEN_STATS_NAMES[col]))
+        for i in range(ITER_TO_PLOT):
+            if i >= len(generation_stats_list):
+                break
+            row = i + 1
+            gen_stats = generation_stats_list[i]
+            # write generation number
+            worksheet.write(row, 0, i + 1)
+            for col in range(len(FCONSTALL_GEN_STATS_NAMES)):
+                worksheet.write(row, col + 1, getattr(gen_stats, FCONSTALL_GEN_STATS_NAMES[col]))
     
-#     workbook.close()
+    workbook.close()
 
 def write_population_stats(population: Population, param_names, run_i, gen_i, homogeneous_frac=None):
-    """
-    Write statistics of a population related to plots to excel
-    :param population: the population to record
-    :param param_names: list of parameters, defining the path
-    :param run_i: number of the run of the GA
-    :param gen_i: number of the generation
-    :param homogeneous_frac: the fraction of homogeneous chromosomes
-    """
     path = __get_path_hierarchy(param_names, run_i)
     path = os.path.join(*path)
     if homogeneous_frac is not None:
@@ -170,9 +150,6 @@ def write_population_stats(population: Population, param_names, run_i, gen_i, ho
     workbook = xlsxwriter.Workbook(os.path.join(path, filename))
     worksheet = workbook.add_worksheet()
     worksheet.name = f'Population: {gen_i}'
-    
-    #three_digit_format = workbook.add_format({'num_format': '0.000'})
-    #two_digit_format = workbook.add_format({'num_format': '0.00'})
 
     worksheet.write(0, 0, 'Genotype')
     worksheet.write(0, 1, 'Phenotype')

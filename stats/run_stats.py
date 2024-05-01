@@ -82,6 +82,8 @@ class RunStats:
         self.Num_loose = 0
         self.optSaved_NI_loose = 0
         self.MaxOptSaved_NI_loose = 0
+        self._optSaved_NI_loose = 0
+        self._MaxOptSaved_NI_loose = 0
 
         # X
         self.unique_X_start = None
@@ -215,13 +217,15 @@ class RunStats:
             if gen_stats.optimal_count == 0 and not self.loose:
                 self.NI_loose = gen_i
                 self.Num_loose += 1
+                self.optSaved_NI_loose = self._optSaved_NI_loose
+                self.MaxOptSaved_NI_loose = self._MaxOptSaved_NI_loose
+                self._optSaved_NI_loose = 0
+                self._MaxOptSaved_NI_loose = 0
                 self.loose = True
             if not self.loose:
-                if gen_stats.optimal_count is None:
-                    print("ALERT IN RUN STATS optimal count is None")
-                self.optSaved_NI_loose = gen_stats.optimal_count
-                if self.MaxOptSaved_NI_loose < gen_stats.optimal_count:
-                    self.MaxOptSaved_NI_loose = gen_stats.optimal_count
+                self._optSaved_NI_loose = gen_stats.optimal_count
+                if self._MaxOptSaved_NI_loose < gen_stats.optimal_count:
+                    self._MaxOptSaved_NI_loose = gen_stats.optimal_count
             
             
 
