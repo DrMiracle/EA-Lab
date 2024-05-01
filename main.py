@@ -19,14 +19,14 @@ beta_value_modified = 1.4
 
 if env == 'test':
     fitness_functions = [
-        (FconstALL(100), 'FconstALL'),
+        # (FconstALL(100), 'FconstALL'),
         (FH(Encoder(100)), 'FH'),
-        (Fx2(FloatEncoder(0.0, 10.23, 10)), 'Fx2'),
+        #(Fx2(FloatEncoder(0.0, 10.23, 10)), 'Fx2'),
         # (Fx2(FloatEncoder(0.0, 10.23, 10, is_gray=True)), 'Fx2_gray'),
-        (F5122subx2(FloatEncoder(-5.12, 5.11, 10)), 'F5122subx2'),
+        # (F5122subx2(FloatEncoder(-5.12, 5.11, 10)), 'F5122subx2'),
         #(F5122subx2(FloatEncoder(-5.12, 5.11, 10, is_gray=True)), 'F5122subx2_gray'),
-        (Fexp(0.25, FloatEncoder(0.0, 10.23, 10)), 'Fexp0.25'),
-        (Fexp(0.25, FloatEncoder(0.0, 10.23, 10, is_gray=True)), 'Fexp0.25_gray'),
+        # (Fexp(0.25, FloatEncoder(0.0, 10.23, 10)), 'Fexp0.25'),
+        # (Fexp(0.25, FloatEncoder(0.0, 10.23, 10, is_gray=True)), 'Fexp0.25_gray'),
         # (Fexp(1, FloatEncoder(0.0, 10.23, 10)), 'Fexp1'),
         # (Fexp(1, FloatEncoder(0.0, 10.23, 10, is_gray=True)), 'Fexp1_gray'),
         # (Fexp(2, FloatEncoder(0.0, 10.23, 10)), 'Fexp2'),
@@ -34,22 +34,23 @@ if env == 'test':
         # (Frastr(7, FloatEncoder(-5.12, 5.11, 10)), 'Frastr'),
         # (Frastr(7, FloatEncoder(-5.12, 5.11, 10, is_gray=True)), 'Frastr_gray'),
         # (Fdeb2(FloatEncoder(0, 1.023, 10)), 'Fdeb2'),
-        (Fdeb2(FloatEncoder(0, 1.023, 10, is_gray=True)), 'Fdeb2_gray'),
+        # (Fdeb2(FloatEncoder(0, 1.023, 10, is_gray=True)), 'Fdeb2_gray'),
         # (Fdeb4(FloatEncoder(0, 1.023, 10)), 'Fdeb4'),
         # (Fdeb4(FloatEncoder(0, 1.023, 10, is_gray=True)), 'Fdeb4_gray'),
     ]
     selection_methods = [
         (LinearRankingRWS(1.6), 'RWS_linear_test'),
         (ExponentialRankingRWS(0.966), 'RWS_exponential_test'),
-        (LinearRankingModifiedRWS(beta_value_modified), 'RWS_linear_modified'),
+        # (LinearRankingModifiedRWS(beta_value_modified), 'RWS_linear_modified'),
     ]
     gen_operators = [
         (BlankGenOperator, 'no_operators')
     ]
     num_optimal = [
+        # (0, "no_optim"),
         (1, "1_optim"),
-        (int(N/20), "5per_optim"),
-        (int(N/10), "10per_optim")
+        # (int(N/20), "5per_optim"),
+        # (int(N/10), "10per_optim")
     ]
 else:
     fitness_functions = [
@@ -84,11 +85,12 @@ else:
     ]
     gen_operators = [
         (BlankGenOperator, 'no_operators'),
-        # (Crossover, 'crossover'),
-        # (Mutation, 'mutation'),
-        # (CrossoverAndMutation, 'xover_mut')
+        (Crossover, 'crossover'),
+        (Mutation, 'mutation'),
+        (CrossoverAndMutation, 'crossover_mut')
     ]
     num_optimal = [
+        (0, "no_optim"),
         (1, "1_optim"),
         (int(N/20), "5per_optim"),
         (int(N/10), "10per_optim")
@@ -102,9 +104,11 @@ experiment_params = {
         (sm, go, (ff_name, sm_name, go_name, no_name))
         for (sm, sm_name) in selection_methods
         for (go, go_name) in gen_operators
+        if not (no_name == "no_optim" and go_name == 'no_operators' and ff_name != 'FconstALL')
     ]
     for (no, no_name) in num_optimal
     for (ff, ff_name) in fitness_functions
+    if not (ff_name == "FconstALL" and no_name in ["1_optim", "5per_optim", "10per_optim"])
 }
 
 # only keeping one list of populations in memory at a time (for one fitness function)
@@ -122,8 +126,9 @@ if __name__ == '__main__':
     results = []
 
     experiment_stats_list = []
-
     for ff, no in itertools.product(fitness_functions, num_optimal):
+        if (ff[0], no[0]) not in experiment_params:
+            continue
         ff_start_time = time.time()
 
         populations = generate_all_populations_for_fitness_function(ff[0], no[0])

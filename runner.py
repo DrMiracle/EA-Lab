@@ -8,6 +8,8 @@ from selection.selection_method import SelectionMethod
 from model.gen_operators import GeneticOperator
 from copy import deepcopy, copy
 from datetime import datetime
+from tqdm import tqdm
+
 
 def run_experiment(selection_method: SelectionMethod,
                    genetic_operator: GeneticOperator,
@@ -21,13 +23,14 @@ def run_experiment(selection_method: SelectionMethod,
          genetic_operator,
          param_names,
          run_i
-        )
+         )
         for run_i in range(NR)
     ]
 
-    for i in range(NR // THREADS):
+    print(f'{str(datetime.now())[:-4]} | Experiment ({"|".join(param_names)}) strating')
+    for i in tqdm(range(NR // THREADS)):
         with Pool(THREADS) as p:
-            results = p.starmap(run, run_param_list[(i * THREADS):((i+1) * THREADS)])
+            results = p.starmap(run, run_param_list[(i * THREADS):((i + 1) * THREADS)])
             for run_i, run_stats in results:
                 stats.add_run(run_stats, run_i)
     if NR % THREADS:
@@ -35,11 +38,12 @@ def run_experiment(selection_method: SelectionMethod,
             results = p.starmap(run, run_param_list[-(NR % THREADS):])
             for run_i, run_stats in results:
                 stats.add_run(run_stats, run_i)
-    
+
     stats.calculate()
     print(f'{str(datetime.now())[:-4]} | Experiment ({"|".join(param_names)}) finished')
     gc.collect()
     return stats
+
 
 def run(init_population: Population,
         selection_method: SelectionMethod,

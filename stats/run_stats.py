@@ -1,6 +1,7 @@
 from config import N
 from stats.generation_stats import GenerationStats
 
+
 class RunStats:
     def __init__(self, param_names: tuple[str]):
         self.param_names = param_names
@@ -80,13 +81,14 @@ class RunStats:
         self.loose = False
         self.NI_loose = 0
         self.Num_loose = 0
-        self.optSaved_NI_loose = None
+        self.optSaved_NI_loose = 0
         self.MaxOptSaved_NI_loose = 0
+        self._optSaved_NI_loose = 0
+        self._MaxOptSaved_NI_loose = 0
 
         # X
         self.unique_X_start = None
         self.unique_X_fin = None
-
 
     def update_stats_for_generation(self, gen_stats: GenerationStats, gen_i):
         # Reproduction Rate
@@ -203,7 +205,7 @@ class RunStats:
             if self.Kend_max is None or gen_stats.kendalls_tau > self.Kend_max:
                 self.Kend_max = gen_stats.kendalls_tau
                 self.NI_Kend_max = gen_i
-            if  self.Kend_avg is None:
+            if self.Kend_avg is None:
                 self.Kend_avg = gen_stats.kendalls_tau
             else:
                 self.Kend_avg = (self.Kend_avg * gen_i + gen_stats.kendalls_tau) / (gen_i + 1)
@@ -214,12 +216,15 @@ class RunStats:
             if gen_stats.optimal_count == 0 and not self.loose:
                 self.NI_loose = gen_i
                 self.Num_loose += 1
+                self.optSaved_NI_loose = self._optSaved_NI_loose
+                self.MaxOptSaved_NI_loose = self._MaxOptSaved_NI_loose
+                self._optSaved_NI_loose = 0
+                self._MaxOptSaved_NI_loose = 0
                 self.loose = True
             if not self.loose:
-                self.optSaved_NI_loose = gen_stats.optimal_count
-                if self.MaxOptSaved_NI_loose < gen_stats.optimal_count:
-                    self.MaxOptSaved_NI_loose = gen_stats.optimal_count
-
+                self._optSaved_NI_loose = gen_stats.optimal_count
+                if self._MaxOptSaved_NI_loose < gen_stats.optimal_count:
+                    self._MaxOptSaved_NI_loose = gen_stats.optimal_count
 
     def update_final_stats(self, gen_stats: GenerationStats, gen_i):
         if self.param_names[0] != 'FconstALL':
