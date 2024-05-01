@@ -20,7 +20,7 @@ beta_value_modified = 1.4
 if env == 'test':
     fitness_functions = [
         # (FconstALL(100), 'FconstALL'),
-        (FH(Encoder(100)), 'FH'),
+        (FH(BinaryEncoder(100)), 'FH'),
         #(Fx2(FloatEncoder(0.0, 10.23, 10)), 'Fx2'),
         # (Fx2(FloatEncoder(0.0, 10.23, 10, is_gray=True)), 'Fx2_gray'),
         # (F5122subx2(FloatEncoder(-5.12, 5.11, 10)), 'F5122subx2'),
@@ -47,7 +47,7 @@ if env == 'test':
         (BlankGenOperator, 'no_operators')
     ]
     num_optimal = [
-        # (0, "no_optim"),
+        (0, "no_optim"),
         (1, "1_optim"),
         # (int(N/20), "5per_optim"),
         # (int(N/10), "10per_optim")
@@ -55,7 +55,7 @@ if env == 'test':
 else:
     fitness_functions = [
         (FconstALL(100), 'FconstALL'),
-        (FH(Encoder(100)), 'FH'),
+        (FH(BinaryEncoder(100)), 'FH'),
         (Fx2(FloatEncoder(0.0, 10.23, 10)), 'Fx2'),
         (Fx2(FloatEncoder(0.0, 10.23, 10, is_gray=True)), 'Fx2_gray'),
         (F5122subx2(FloatEncoder(-5.12, 5.11, 10)), 'F5122subx2'),
