@@ -39,8 +39,8 @@ if env == 'test':
         # (Fdeb4(FloatEncoder(0, 1.023, 10, is_gray=True)), 'Fdeb4_gray'),
     ]
     selection_methods = [
-        (LinearRankingRWS(1.6), 'RWS_linear_test'),
-        (ExponentialRankingRWS(0.966), 'RWS_exponential_test'),
+        (LinearRankingRWS(1.6), 'RWS_linear_test (1.6)'),
+        (ExponentialRankingRWS(0.966), 'RWS_exponential_test (0.966)'),
         # (LinearRankingModifiedRWS(beta_value_modified), 'RWS_linear_modified'),
     ]
     gen_operators = [
