@@ -1,7 +1,9 @@
-from config import N, NR, OUTPUT_FOLDER, RUN_STATS_NAMES, EXP_STATS_NAMES, FCONSTALL_RUN_STATS_NAMES, FCONSTALL_EXP_STATS_NAMES
+from config import *
 import xlsxwriter
 import os
 from stats.experiment_stats import ExperimentStats
+import numpy as np
+from model.population import Population
 
 def write_ff_stats(experiment_stats_list: list[ExperimentStats]):
     ff_name = experiment_stats_list[0].params[0]
@@ -94,3 +96,120 @@ def write_aggregated_stats(experiment_stats_list: list[ExperimentStats]):
                 worksheet.write(0, col, stat_name)
 
     workbook.close()
+
+# def write_generation_stats(generation_stats_list, param_names, run_i):
+#     """
+#     Write statistics of a generation to excel
+#     :param generation_stats_list: list of generation statistics
+#     :param param_names: list of parameters, defining the path
+#     :param run_i: number of the run of the GA
+#     """
+#     path = __get_path_hierarchy(param_names, run_i)
+#     path = os.path.join(*path)
+#     os.makedirs(path, exist_ok=True)
+#     filename = f'{run_i}.xlsx'
+
+#     workbook = xlsxwriter.Workbook(os.path.join(path, filename))
+#     worksheet = workbook.add_worksheet()
+#     worksheet.name = f'Run: {run_i}'
+#     worksheet.freeze_panes(1, 1)
+
+#     worksheet.write(0, 0, 'Generation number')
+#     if param_names[0] != 'FconstALL':
+#         for col in range(len(GEN_STATS_NAMES)):
+#             worksheet.write(0, col + 1, GEN_STATS_NAMES[col])
+
+#         for i in range(DISTRIBUTIONS_TO_PLOT):
+#             if i >= len(generation_stats_list):
+#                 break
+#             row = i + 1
+#             gen_stats = generation_stats_list[i]
+#             # write generation number
+#             worksheet.write(row, 0, i + 1)
+#             for col in range(len(GEN_STATS_NAMES)):
+#                 value = getattr(gen_stats, GEN_STATS_NAMES[col])
+#                 if GEN_STATS_NAMES[col] == 'growth_rate' and i == 0:
+#                     value = None
+#                 __write_value_with_nan_inf_handling(worksheet, row, col, value)
+#                 # worksheet.write(row, col + 1, getattr(gen_stats, GEN_STATS_NAMES[col]))
+#     else:
+#         for col in range(len(FCONSTALL_GEN_STATS_NAMES)):
+#             worksheet.write(0, col + 1, FCONSTALL_GEN_STATS_NAMES[col])
+
+#         for i in range(DISTRIBUTIONS_TO_PLOT):
+#             if i >= len(generation_stats_list):
+#                 break
+#             row = i + 1
+#             gen_stats = generation_stats_list[i]
+#             # write generation number
+#             worksheet.write(row, 0, i + 1)
+#             for col in range(len(FCONSTALL_GEN_STATS_NAMES)):
+#                 value = getattr(gen_stats, FCONSTALL_GEN_STATS_NAMES[col])
+#                 __write_value_with_nan_inf_handling(worksheet, row, col, value)
+#                 worksheet.write(row, col + 1, getattr(gen_stats, FCONSTALL_GEN_STATS_NAMES[col]))
+    
+#     workbook.close()
+
+def write_population_stats(population: Population, param_names, run_i, gen_i, homogeneous_frac=None):
+    """
+    Write statistics of a population related to plots to excel
+    :param population: the population to record
+    :param param_names: list of parameters, defining the path
+    :param run_i: number of the run of the GA
+    :param gen_i: number of the generation
+    :param homogeneous_frac: the fraction of homogeneous chromosomes
+    """
+    path = __get_path_hierarchy(param_names, run_i)
+    path = os.path.join(*path)
+    if homogeneous_frac is not None:
+        path = os.path.join(path, 'homogeneous')
+    os.makedirs(path, exist_ok=True)
+    x = 'Final' if homogeneous_frac is None else int(homogeneous_frac*100)
+    filename = f'{x}_{gen_i}.xlsx'
+
+    workbook = xlsxwriter.Workbook(os.path.join(path, filename))
+    worksheet = workbook.add_worksheet()
+    worksheet.name = f'Population: {gen_i}'
+    
+    #three_digit_format = workbook.add_format({'num_format': '0.000'})
+    #two_digit_format = workbook.add_format({'num_format': '0.00'})
+
+    worksheet.write(0, 0, 'Genotype')
+    worksheet.write(0, 1, 'Phenotype')
+    worksheet.write(0, 2, 'Fitness')
+    worksheet.write(0, 3, '#individuals')
+
+    def hash_numpy(geno):
+        hash = ''.join(str(b.decode('utf-8')) for b in geno)
+        return hash
+    
+    genotypes = {}
+    for chrom in population.chromosomes:
+        geno = hash_numpy(chrom.genotype)
+        if geno in genotypes:
+            genotypes[geno][2] += 1
+        else:
+            genotypes[geno] = [population.fitness_function.get_phenotype(chrom.genotype), chrom.fitness, 1]
+        
+    genotypes = dict(sorted(genotypes.items(), key=lambda x: x[1][2], reverse=True))
+
+    for i, geno in enumerate(genotypes.keys()):
+        row = i + 1
+        worksheet.write(row, 0, geno)
+        worksheet.write(row, 1, genotypes[geno][0])
+        worksheet.write(row, 2, genotypes[geno][1])
+        worksheet.write(row, 3, genotypes[geno][2])
+    
+    workbook.close()
+
+def __get_path_hierarchy(param_names, run_i):
+    return [
+        OUTPUT_FOLDER,
+        'tables',
+        param_names[0], # fitness function
+        param_names[1], # selection method
+        str(N),
+        param_names[2], # genetic operator
+        param_names[3], # initial population
+        str(run_i)
+    ]

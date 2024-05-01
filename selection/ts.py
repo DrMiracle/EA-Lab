@@ -17,7 +17,7 @@ class TS(SelectionMethod):
         if self.replacement:
             num_offsprings, mating_pool = self.tournament_with_replacement(population)
         else:
-            num_offsprings, mating_pool = self.tournament(population)
+            num_offsprings, mating_pool = self.tournament_without_replacement(population)
 
         np.random.shuffle(mating_pool)
         population.update_chromosomes(mating_pool)
@@ -26,7 +26,7 @@ class TS(SelectionMethod):
 
 
 
-    def tournament(self, population: Population):
+    def tournament_with_replacement(self, population: Population):
         num_offsprings = [0 for _ in range(len(population.chromosomes))]
         mating_pool = []
 
@@ -46,7 +46,7 @@ class TS(SelectionMethod):
 
 
 
-    def tournament_with_replacement(self, population: Population):
+    def tournament_without_replacement(self, population: Population):
         num_offsprings = [0 for _ in range(len(population.chromosomes))]
         mating_pool = []
 

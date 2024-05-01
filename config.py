@@ -1,11 +1,11 @@
 # environment parameters
 env = 'test'
-THREADS = 16
+THREADS = 8
 
 # run parameters
 N = 100 if env == 'test' else 100
-G = 10000 if env == 'test' else 10000
-NR = 100 if env == 'test' else 100
+G = 1000 if env == 'test' else 10000000
+NR = 24 if env == 'test' else 100
 
 # convergence parameters
 EPS = 0.0001
@@ -20,6 +20,9 @@ get_pop_seed = lambda run_i: 1381*run_i + 5912826
 DISTRIBUTIONS_TO_PLOT = 5
 RUNS_TO_PLOT = 5
 OUTPUT_FOLDER = 'out_test' if env == 'test' else 'out'
+
+
+
 RUN_STATS_NAMES = [
     'NI', 'F_found', 'F_avg',
     'RR_start', 'RR_min', 'NI_RR_min', 'RR_max', 'NI_RR_max', 'RR_avg', 'RR_fin',
@@ -33,6 +36,7 @@ RUN_STATS_NAMES = [
     'NI_loose', 'Num_loose', 'optSaved_NI_loose', 'MaxOptSaved_NI_loose',
     'unique_X_start', 'unique_X_fin'
 ]
+
 EXP_STATS_NAMES = [
     'Suc', 'N_Suc', 'Min_NI', 'Max_NI', 'Avg_NI', 'Sigma_NI',
 

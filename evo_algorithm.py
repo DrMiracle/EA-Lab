@@ -5,6 +5,7 @@ from model.gen_operators import GeneticOperator
 from stats.run_stats import RunStats
 from stats.generation_stats import GenerationStats
 from output import plotting
+from output import excel
 
 
 class EvoAlgorithm:
@@ -23,10 +24,19 @@ class EvoAlgorithm:
         self.prev_gen_stats = None
         self.gen_stats_list = None
         self.has_converged = False
+
+        self.dict_dis_output = None
         
     def run(self, run_i):
         if run_i < RUNS_TO_PLOT:
             self.gen_stats_list = []
+            self.dict_dis_output = {
+                0.7: False,
+                0.8: False,
+                0.9: False,
+                0.95: False,
+                0.99: False
+            }
 
         f_avgs = []
         while not self.has_converged and self.gen_i < G:
@@ -35,7 +45,7 @@ class EvoAlgorithm:
             f_avgs.append(gen_stats.f_avg)
             if len(f_avgs) > N_LAST_GENS:
                 f_avgs.pop(0)
-
+            
             self.has_converged = self.population.has_converged(f_avgs, self.param_names)
             self.prev_gen_stats = gen_stats
             self.gen_i += 1
@@ -52,8 +62,15 @@ class EvoAlgorithm:
         return self.run_stats
 
     def __calculate_stats_and_evolve(self, run_i):
-        if run_i < RUNS_TO_PLOT and self.gen_i < DISTRIBUTIONS_TO_PLOT:
-            plotting.plot_generation_stats(self.population, self.param_names, run_i, self.gen_i)
+        if run_i < RUNS_TO_PLOT:
+            if self.gen_i < DISTRIBUTIONS_TO_PLOT or self.gen_i%10000 == 0:
+                plotting.plot_generation_stats(self.population, self.param_names, run_i, self.gen_i)
+            for key in self.dict_dis_output:
+                if self.population.is_homogenous_frac(key) and not self.dict_dis_output[key]:
+                    self.dict_dis_output[key] = True
+                    plotting.plot_generation_stats(self.population, self.param_names, run_i, self.gen_i)
+                    if key in [0.9, 0.95, 0.99]:
+                        excel.write_population_stats(self.population, self.param_names, run_i, self.gen_i, key)
         
         gen_stats = GenerationStats(self.population, self.param_names)
         if run_i < RUNS_TO_PLOT:
@@ -68,8 +85,10 @@ class EvoAlgorithm:
         return gen_stats
 
     def __calculate_final_stats(self, run_i):
-        if run_i < RUNS_TO_PLOT and self.gen_i < DISTRIBUTIONS_TO_PLOT:
+        if run_i < RUNS_TO_PLOT:
             plotting.plot_generation_stats(self.population, self.param_names, run_i, self.gen_i)
+            excel.write_population_stats(self.population, self.param_names, run_i, self.gen_i)
+
 
         gen_stats = GenerationStats(self.population, self.param_names)
         if run_i < RUNS_TO_PLOT:
@@ -82,9 +101,9 @@ class EvoAlgorithm:
 
 
     def __check_success(self, gen_stats: GenerationStats):
-        if self.param_names[0] == 'FconstALL':
+        if self.param_names[2] == 'no_operators' and self.param_names[0] == 'FconstALL':
             return self.has_converged
-        elif self.param_names[0] == 'FH':
-            return self.has_converged and gen_stats.optimal_count >= N * 0.9
+        elif self.param_names[2] == 'no_operators':
+            return self.has_converged and self.population._suc_chr() == 1
         else:
             return self.has_converged and self.population.found_close_to_optimal()

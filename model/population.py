@@ -11,8 +11,8 @@ class Population:
         if chromosomes is not None:
             self.chromosomes = chromosomes
         else:
+            self.chromosomes = np.empty(N, dtype=object)
             if num_optimal != 0:
-                self.chromosomes = np.empty(N, dtype=object)
                 for i in range(num_optimal):
                     self.chromosomes[i] = copy(fitness_function.get_optimal())
             rng = np.random.default_rng(seed=seed)
@@ -23,15 +23,9 @@ class Population:
         self.update()
 
     def has_converged(self, f_avgs, param_names):
-        has_mutation = 'mut' in param_names[2]
-
-        if not has_mutation:
+        if param_names[2] == 'no_operators':
             return self.is_homogenous_100()
-            
-        if param_names[0] == 'FconstALL':
-            return self.is_homogenous_99()
-
-        return self.has_f_avg_converged(f_avgs)
+        return self.is_homogenous_frac(0.99)
     
     def has_f_avg_converged(self, f_avgs):
         if len(f_avgs) < N_LAST_GENS:
@@ -44,24 +38,27 @@ class Population:
             diffs.append(abs(curr - prev))
 
         return all(x <= EPS for x in diffs)
-    
-    def is_homogenous_99(self):
+
+    def is_homogenous_frac(self, frac):
         l = self.fitness_function.chr_length
         for i in range(l):
             n_zeros = len([True for g in self.genotypes if g[i] == b'0'])
             percentage = n_zeros / N
-            if percentage > 0.01 and percentage < 0.99:
+            if percentage > (1 - frac) and percentage < frac:
                 return False
         return True
 
     def is_homogenous_100(self):
             return all([np.array_equal(geno, self.genotypes[0]) for geno in self.genotypes[1:]])
 
+    def _suc_chr(self):
+        return len([True for chr in self.chromosomes if self.fitness_function.check_chromosome_success(chr)])/len(self.chromosomes)
+    
     def found_close_to_optimal(self):
-        for chr in self.chromosomes:
-            if self.fitness_function.check_chromosome_success(chr):
-                return True
+        if self._suc_chr() > 0.9:
+            return True
         return False
+    
 
     def get_fitness_max(self):
         res = np.max(self.fitnesses)

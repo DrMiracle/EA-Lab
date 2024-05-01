@@ -12,9 +12,9 @@ def plot_run_stats(
         run_i):
     reproduction_rates = [gen_stats.reproduction_rate for gen_stats in gen_stats_list if gen_stats.reproduction_rate is not None]
     losses_of_diversity = [gen_stats.loss_of_diversity for gen_stats in gen_stats_list if gen_stats.loss_of_diversity is not None]
-    __plot_stat2(reproduction_rates, losses_of_diversity, param_names, run_i, 'Reproduction Rate', 'Loss of Diversity', 'rr_and_lod')
+    __plot_stat2(reproduction_rates, losses_of_diversity, param_names, run_i, 'Reproduction Rate', 'Loss of Diversity', 'rr_and_lod', y_lim = (0, 1))
 
-    if param_names[0] != 'FconstALL_None':
+    if param_names[0] != 'FconstALL':
         f_avgs = [gen_stats.f_avg for gen_stats in gen_stats_list]
         __plot_stat(f_avgs, param_names, run_i, 'Fitness Average', 'f_avg')
 
@@ -49,11 +49,11 @@ def plot_run_stats(
         fitness_ratio = [gen_stats.fitness_ratio for gen_stats in gen_stats_list]
         __plot_stat(fitness_ratio, param_names, run_i, 'Fitness Ratio (f_max / f_avg)', 'fitness_ratio')
 
-        # fisher_exact_test = [gen_stats.fisher_exact_test for gen_stats in gen_stats_list]
-        # __plot_stat(fisher_exact_test, param_names, run_i, 'Fisher\'s Exact Test', 'fisher_exact_test')
-        #
-        # kendalls_tau_b = [gen_stats.kendalls_tau_b for gen_stats in gen_stats_list]
-        # __plot_stat(kendalls_tau_b, param_names, run_i, 'Kendall\'s Tau-b', 'kendalls_tau_b')
+        fisher_exact_test = [gen_stats.fisher_exact_test for gen_stats in gen_stats_list]
+        __plot_stat(fisher_exact_test, param_names, run_i, 'Fisher\'s Exact Test', 'fisher_exact_test', y_lim = (0, 1.01))
+        
+        kendalls_tau = [gen_stats.kendalls_tau for gen_stats in gen_stats_list]
+        __plot_stat(kendalls_tau, param_names, run_i, 'Kendall\'s Tau-b', 'kendalls_tau_b', y_lim = (-1.01, 1.01))
 
 
 def plot_generation_stats(
@@ -72,12 +72,16 @@ def __plot_stat(
         param_names: tuple[str],
         run_i,
         ylabel,
-        file_name):
+        file_name,
+        y_lim = None):
     param_hierarchy = __get_path_hierarchy(param_names, run_i)
     path = '/'.join(param_hierarchy)
 
     if not os.path.exists(path):
         os.makedirs(path)
+
+    if y_lim is not None:
+        plt.ylim(*y_lim)
 
     plt.plot(data)
     plt.ylabel(ylabel)
@@ -90,12 +94,16 @@ def __plot_stat2(
         param_names: tuple[str],
         run_i,
         label1, label2,
-        file_name):
+        file_name,
+        y_lim = None):
     param_hierarchy = __get_path_hierarchy(param_names, run_i)
     path = '/'.join(param_hierarchy)
 
     if not os.path.exists(path):
         os.makedirs(path)
+
+    if y_lim is not None:
+        plt.ylim(*y_lim)
 
     plt.plot(data1, label=label1)
     plt.plot(data2, label=label2)

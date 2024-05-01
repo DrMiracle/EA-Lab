@@ -441,25 +441,36 @@ class ExperimentStats:
     def __calculate_loose_stats(self, runs: list[RunStats]):
         with_loose = [r for r in runs if r.Num_loose > 0]
         if with_loose:
-            self.NI_with_Loose = len(with_loose)
-            self.Avg_NI_loose = np.mean([r.NI_loose for r in with_loose])
-            self.Sigma_NI_loose = np.std([r.NI_loose for r in with_loose])
-            self.Avg_Num_loose = np.mean([r.Num_loose for r in with_loose])
-            self.Sigma_Num_loose = np.std([r.Num_loose for r in with_loose])
-            self.Avg_optSaved_NI_loose = np.mean([r.optSaved_NI_loose for r in with_loose]) 
-            self.Sigma_optSaved_NI_loose = np.std([r.optSaved_NI_loose for r in with_loose]) 
-            self.Avg_MaxOptSaved_NI_loose = np.mean([r.MaxOptSaved_NI_loose for r in with_loose])
-            self.Sigma_MaxOptSaved_NI_loose = np.std([r.MaxOptSaved_NI_loose for r in with_loose])
+            lost_NI = [r.NI_loose for r in with_loose]
+            if lost_NI:
+                self.Avg_NI_loose = np.mean(lost_NI)
+                self.Sigma_NI_loose = np.std(lost_NI)
+            lost_Num = [r.Num_loose for r in with_loose]
+            if lost_Num:
+                self.Avg_Num_loose = np.mean(lost_Num)
+                self.Sigma_Num_loose = np.std(lost_Num)
+            lost_optSaved = [r.optSaved_NI_loose for r in with_loose]
+            if lost_optSaved:
+                self.Avg_optSaved_NI_loose = np.mean(lost_optSaved)
+                self.Sigma_optSaved_NI_loose = np.std(lost_optSaved)
+            lost_MaxoptSaved = [r.MaxOptSaved_NI_loose for r in with_loose]
+            if lost_MaxoptSaved:
+                self.Avg_MaxOptSaved_NI_loose = np.mean(lost_MaxoptSaved)
+                self.Sigma_MaxOptSaved_NI_loose = np.std(lost_MaxoptSaved)
 
     def __calculate_unique_X_stats(self, runs: list[RunStats]):
-        self.Avg_unique_X_start = np.mean([r.unique_X_start for r in runs])
-        self.Avg_unique_X_fin = np.mean([r.unique_X_fin for r in runs])
-        self.Sigma_unique_X_start = np.std([r.unique_X_start for r in runs])
-        self.Sigma_unique_X_fin = np.std([r.unique_X_fin for r in runs])
-        self.Min_unique_X_start = np.min([r.unique_X_start for r in runs])
-        self.Max_unique_X_start = np.max([r.unique_X_start for r in runs])
-        self.Min_unique_X_fin = np.min([r.unique_X_fin for r in runs]) 
-        self.Max_unique_X_fin = np.max([r.unique_X_fin for r in runs])
+        unique_X_start = [r.unique_X_start for r in runs]
+        if unique_X_start:
+            self.Avg_unique_X_start = np.mean(unique_X_start)
+            self.Sigma_unique_X_start = np.std(unique_X_start)
+            self.Min_unique_X_start = np.min(unique_X_start)
+            self.Max_unique_X_start = np.max(unique_X_start)
+        unique_X_fin = [r.unique_X_fin for r in runs]
+        if unique_X_fin:
+            self.Avg_unique_X_fin = np.mean(unique_X_fin)
+            self.Sigma_unique_X_fin = np.std(unique_X_fin)
+            self.Min_unique_X_fin = np.min(unique_X_fin)
+            self.Max_unique_X_fin = np.max(unique_X_fin)
 
 
 def __str__(self):

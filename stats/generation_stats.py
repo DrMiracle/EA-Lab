@@ -32,6 +32,8 @@ class GenerationStats:
     def calculate_stats_before_selection(self, prev_gen_stats):
         self.ids_before_selection = set(self.population.get_ids())
 
+        self.unique_chromosomes_count = len(set([tuple(ch.genotype) for ch in self.population.chromosomes]))
+
         if self.param_names[0] != 'FconstALL':
             self.f_avg = self.population.get_fitness_avg()
             self.f_std = self.population.get_fitness_std()
@@ -46,8 +48,6 @@ class GenerationStats:
                 self.growth_rate = num_of_prev_best / prev_gen_stats.num_of_best
 
             self.best_copies_percentage = self.num_of_best / N
-
-            self.unique_chromosomes_count = len(set([tuple(ch.genotype) for ch in self.population.chromosomes]))
 
             if self.f_avg != 0:
                 self.fitness_ratio = self.f_best / self.f_avg
