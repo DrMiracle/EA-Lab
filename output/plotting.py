@@ -1,4 +1,6 @@
 import matplotlib.pyplot as plt
+from matplotlib.ticker import MaxNLocator
+
 from config import N, OUTPUT_FOLDER
 import os
 from model.population import Population
@@ -87,9 +89,18 @@ def __plot_stat(
     if y_lim is not None:
         plt.ylim(*y_lim)
 
-    plt.plot(data)
+    x_ticks = range(len(data))
+    if data[-1] is None:
+        x_ticks = range(1, len(data))
+        data = data[:-1]
+    plt.plot(x_ticks, data)
     plt.ylabel(ylabel)
     plt.xlabel('Generation')
+    # plt.xticks(x_ticks)
+    # Set the ticks for the x-axis with MaxNLocator
+    plt.gca().xaxis.set_major_locator(MaxNLocator(integer=True, nbins=10))
+    # n = len(data)
+    # plt.gca().xaxis.set_minor_locator(MultipleLocator((x_ticks[-1] - x_ticks[0]) / (n + 1)))
     plt.savefig(f'{path}/{file_name}.png')
     plt.close()
 
@@ -110,9 +121,11 @@ def __plot_stat2(
     if y_lim is not None:
         plt.ylim(*y_lim)
 
-    plt.plot(data1, label=label1)
-    plt.plot(data2, label=label2)
+    x_ticks = range(1, len(data1) + 1)
+    plt.plot(x_ticks, data1, label=label1)
+    plt.plot(x_ticks, data2, label=label2)
 
+    plt.gca().xaxis.set_major_locator(MaxNLocator(integer=True, nbins=10))
     plt.xlabel('Generation')
     plt.legend()
     plt.savefig(f'{path}/{file_name}.png')

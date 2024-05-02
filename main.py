@@ -23,7 +23,7 @@ if env == 'test':
         (FH(BinaryEncoder(100)), 'FH'),
         #(Fx2(FloatEncoder(0.0, 10.23, 10)), 'Fx2'),
         # (Fx2(FloatEncoder(0.0, 10.23, 10, is_gray=True)), 'Fx2_gray'),
-        # (F5122subx2(FloatEncoder(-5.12, 5.11, 10)), 'F5122subx2'),
+        (F5122subx2(FloatEncoder(-5.12, 5.11, 10)), 'F5122subx2'),
         #(F5122subx2(FloatEncoder(-5.12, 5.11, 10, is_gray=True)), 'F5122subx2_gray'),
         # (Fexp(0.25, FloatEncoder(0.0, 10.23, 10)), 'Fexp0.25'),
         # (Fexp(0.25, FloatEncoder(0.0, 10.23, 10, is_gray=True)), 'Fexp0.25_gray'),
@@ -39,6 +39,7 @@ if env == 'test':
         # (Fdeb4(FloatEncoder(0, 1.023, 10, is_gray=True)), 'Fdeb4_gray'),
     ]
     selection_methods = [
+        # (SUS(), 'SUS (n)'),
         (LinearRankingRWS(1.6), 'RWS_linear_test (1.6)'),
         (ExponentialRankingRWS(0.966), 'RWS_exponential_test (0.966)'),
         # (LinearRankingModifiedRWS(beta_value_modified), 'RWS_linear_modified'),
@@ -85,9 +86,9 @@ else:
     ]
     gen_operators = [
         (BlankGenOperator, 'no_operators'),
-        (Crossover, 'crossover'),
-        (Mutation, 'mutation'),
-        (CrossoverAndMutation, 'crossover_mut')
+        # (Crossover, 'crossover'),
+        # (Mutation, 'mutation'),
+        # (CrossoverAndMutation, 'crossover_mut')
     ]
     num_optimal = [
         (0, "no_optim"),

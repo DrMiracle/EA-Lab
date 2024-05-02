@@ -23,7 +23,7 @@ class LinearRankingRWS(SelectionMethod):
         for i in chosen:
             num_offsprings[i] += 1
 
-        mating_pool = [population.chromosomes[i] for i in chosen]
+        mating_pool = [deepcopy(population.chromosomes[i]) for i in chosen]
         np.random.shuffle(mating_pool)
         population.update_chromosomes(mating_pool)
 
@@ -53,7 +53,7 @@ class ExponentialRankingRWS(SelectionMethod):
         for i in chosen:
             num_offsprings[i] += 1
 
-        mating_pool = [population.chromosomes[i] for i in chosen]
+        mating_pool = [deepcopy(population.chromosomes[i]) for i in chosen]
         np.random.shuffle(mating_pool)
         population.update_chromosomes(mating_pool)
 
@@ -91,7 +91,7 @@ class LinearRankingModifiedRWS(SelectionMethod):
         for i in chosen:
             num_offsprings[i] += 1
 
-        mating_pool = [population.chromosomes[i] for i in chosen]
+        mating_pool = [deepcopy(population.chromosomes[i]) for i in chosen]
         np.random.shuffle(mating_pool)
         population.update_chromosomes(mating_pool)
 

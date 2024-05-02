@@ -1,5 +1,5 @@
 # environment parameters
-env = 'test'
+env = 'prod'
 THREADS = 16
 
 # run parameters
@@ -19,7 +19,7 @@ get_pop_seed = lambda run_i: 1381 * run_i + 5912826
 # output parameters
 ITER_TO_PLOT = 50
 DISTRIBUTIONS_TO_PLOT = 4
-RUNS_TO_PLOT = 5
+RUNS_TO_PLOT = 4
 OUTPUT_FOLDER = 'out_test' if env == 'test' else 'out'
 
 RUN_STATS_NAMES = [
