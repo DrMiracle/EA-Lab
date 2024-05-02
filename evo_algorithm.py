@@ -13,7 +13,7 @@ class EvoAlgorithm:
                  initial_population: Population,
                  selection_method: SelectionMethod,
                  genetic_operator: GeneticOperator,
-                 param_names: tuple[str]):
+                 param_names: tuple[str], plotter):
         self.population: Population = initial_population
         self.selection_method = selection_method
         self.genetic_operator = genetic_operator
@@ -24,6 +24,7 @@ class EvoAlgorithm:
         self.prev_gen_stats = None
         self.gen_stats_list = None
         self.has_converged = False
+        self.plotter = plotter
 
         self.dict_dis_output = None
 
@@ -56,8 +57,8 @@ class EvoAlgorithm:
         self.run_stats.is_converged = self.has_converged
 
         if run_i < RUNS_TO_PLOT:
-            plotting.plot_generation_stats(self.population, self.param_names, run_i, self.gen_i)
-            plotting.plot_run_stats(self.gen_stats_list, self.param_names, run_i)
+            self.plotter.plot_generation_stats(self.population, self.param_names, run_i, self.gen_i)
+            self.plotter.plot_run_stats(self.gen_stats_list, self.param_names, run_i)
             excel.write_generation_stats(self.gen_stats_list, self.param_names, run_i)
 
         return self.run_stats
@@ -65,11 +66,11 @@ class EvoAlgorithm:
     def __calculate_stats_and_evolve(self, run_i):
         if run_i < RUNS_TO_PLOT:
             if self.gen_i < DISTRIBUTIONS_TO_PLOT or self.gen_i % 10000 == 0:
-                plotting.plot_generation_stats(self.population, self.param_names, run_i, self.gen_i)
+                self.plotter.plot_generation_stats(self.population, self.param_names, run_i, self.gen_i)
             for key in self.dict_dis_output:
                 if self.population.is_homogenous_frac(key) and not self.dict_dis_output[key]:
                     self.dict_dis_output[key] = True
-                    plotting.plot_generation_stats(self.population, self.param_names, run_i, self.gen_i)
+                    self.plotter.plot_generation_stats(self.population, self.param_names, run_i, self.gen_i)
                     if key in [0.9, 0.95, 0.99]:
                         excel.write_population_stats(self.population, self.param_names, run_i, self.gen_i, key)
 
@@ -87,7 +88,7 @@ class EvoAlgorithm:
 
     def __calculate_final_stats(self, run_i):
         if run_i < RUNS_TO_PLOT:
-            plotting.plot_generation_stats(self.population, self.param_names, run_i, self.gen_i)
+            self.plotter.plot_generation_stats(self.population, self.param_names, run_i, self.gen_i)
             excel.write_population_stats(self.population, self.param_names, run_i, self.gen_i)
 
         gen_stats = GenerationStats(self.population, self.param_names)

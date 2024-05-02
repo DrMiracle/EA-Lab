@@ -1,6 +1,7 @@
 from multiprocessing import Pool
 import gc
 from config import NR, THREADS
+from output.plot_stats import plot_stats
 from stats.experiment_stats import ExperimentStats
 from evo_algorithm import EvoAlgorithm
 from model.population import Population
@@ -50,6 +51,8 @@ def run(init_population: Population,
         genetic_operator: GeneticOperator,
         param_names: tuple[str],
         run_i: int):
+    plotter = plot_stats()
     sm_obj = copy(selection_method)
-    current_run = EvoAlgorithm(deepcopy(init_population), sm_obj, genetic_operator, param_names).run(run_i)
+    current_run = EvoAlgorithm(deepcopy(init_population), sm_obj, genetic_operator, param_names, plotter).run(run_i)
+    plotter.Close()
     return (run_i, current_run)

@@ -101,7 +101,7 @@ def __plot_stat(
     plt.gca().xaxis.set_major_locator(MaxNLocator(integer=True, nbins=10))
     # n = len(data)
     # plt.gca().xaxis.set_minor_locator(MultipleLocator((x_ticks[-1] - x_ticks[0]) / (n + 1)))
-    plt.savefig(f'{path}/{file_name}.png')
+    plt.savefig(f'{path}/{file_name}.png', dpi=70)
     plt.close()
 
 
@@ -128,7 +128,7 @@ def __plot_stat2(
     plt.gca().xaxis.set_major_locator(MaxNLocator(integer=True, nbins=10))
     plt.xlabel('Generation')
     plt.legend()
-    plt.savefig(f'{path}/{file_name}.png')
+    plt.savefig(f'{path}/{file_name}.png', dpi=70)
     plt.close()
 
 
@@ -148,7 +148,7 @@ def __plot_fitness_distribution(
     plt.bar(x, y, width=x_step * 0.8)
     plt.xlabel('Chromosome fitness')
     plt.ylabel('Number of chromosomes')
-    plt.savefig(f'{path}/{gen_i}.png')
+    plt.savefig(f'{path}/{gen_i}.png', dpi=70)
     plt.close()
 
 
@@ -171,7 +171,7 @@ def __plot_phenotype_distribution(
     plt.bar(x, y, width=x_step * 0.8)
     plt.xlabel('Chromosome phenotype')
     plt.ylabel('Number of chromosomes')
-    plt.savefig(f'{path}/{gen_i}.png')
+    plt.savefig(f'{path}/{gen_i}.png', dpi=70)
     plt.close()
 
 
@@ -190,7 +190,7 @@ def __plot_genotype_distribution(
     plt.bar(x, y)
     plt.xlabel('Number of 1s in genotype')
     plt.ylabel('Number of chromosomes')
-    plt.savefig(f'{path}/{gen_i}.png')
+    plt.savefig(f'{path}/{gen_i}.png', dpi=70)
     plt.close()
 
 
