@@ -1,17 +1,19 @@
 import numpy as np
 
+
 class Encoder:
     def __init__(self, length):
         self.length: int = length
-    
+
     def encode(self, num):
         raise NotImplementedError()
 
     def decode(self, encoded):
         raise NotImplementedError()
-    
+
     def get_all_values(self):
         raise NotImplementedError()
+
 
 class BinaryEncoder(Encoder):
     def __init__(self, length):
@@ -20,27 +22,28 @@ class BinaryEncoder(Encoder):
 
     def encode(self, num):
         encoded_str = bin(num)[2:]
-        encoded_str = '0'*(self.length - len(encoded_str)) + encoded_str
+        encoded_str = '0' * (self.length - len(encoded_str)) + encoded_str
         encoded = np.array(list(encoded_str), dtype=bytes)
         return encoded
-    
+
     def decode(self, encoded):
         return int(encoded.tobytes(), 2)
-    
+
     def get_all_values(self):
-        return [self.encode(v) for v in range(2**self.length)]
+        return [self.encode(v) for v in range(2 ** self.length)]
+
 
 class GrayEncoder(Encoder):
     def __init__(self, length):
         self.length: int = length
-    
+
     def encode(self, num):
         num ^= (num >> 1)
         encoded_str = bin(num)[2:]
-        encoded_str = '0'*(self.length - len(encoded_str)) + encoded_str
+        encoded_str = '0' * (self.length - len(encoded_str)) + encoded_str
         encoded = np.array(list(encoded_str), dtype=bytes)
         return encoded
-    
+
     def decode(self, encoded):
         decoded = int(encoded.tobytes(), 2)
         decoded ^= decoded >> 16
@@ -49,9 +52,10 @@ class GrayEncoder(Encoder):
         decoded ^= decoded >> 2
         decoded ^= decoded >> 1
         return decoded
-    
+
     def get_all_values(self):
-        return [self.encode(v) for v in range(2**self.length)]
+        return [self.encode(v) for v in range(2 ** self.length)]
+
 
 class FloatEncoder(Encoder):
     def __init__(self, lower_bound, upper_bound, length, is_gray=False):
@@ -65,17 +69,17 @@ class FloatEncoder(Encoder):
             self.sub_encoder: Encoder = GrayEncoder(length)
         else:
             self.sub_encoder: Encoder = BinaryEncoder(length)
-    
+
     def encode(self, num):
         n = round((num - self.lower_bound) * self.__encoding_multiplier)
         encoded = self.sub_encoder.encode(n)
         return encoded
-    
+
     def decode(self, encoded):
         n = self.sub_encoder.decode(encoded)
-        decoded = round(self.lower_bound + n * self.__decoding_multiplier, 2)
+        decoded = self.lower_bound + n * self.__decoding_multiplier
         return decoded
-    
+
     def get_all_values(self):
         return self.sub_encoder.get_all_values()
 

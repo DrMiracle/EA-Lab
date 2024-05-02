@@ -178,7 +178,7 @@ class ExperimentStats:
         self.runs[run_i] = run
 
     def calculate(self):
-        successful_runs = [run for run in self.runs if run.is_successful]
+        successful_runs = [run for run in self.runs if run.IsSuc]
         self.N_Suc = len(successful_runs)
         self.Suc = self.N_Suc / NR
 
@@ -195,7 +195,7 @@ class ExperimentStats:
             self.__calculate_fish_stats(successful_runs)
             self.__calculate_kend_stats(successful_runs)
 
-        unsuccessful_converged_runs = [run for run in self.runs if not run.is_successful and run.is_converged]
+        unsuccessful_converged_runs = [run for run in self.runs if not run.IsSuc and run.is_converged]
         self.N_nonSuc = len(unsuccessful_converged_runs)
         self.nonSuc = self.N_nonSuc / NR
         # Calculate stats for unsuccessful but converged runs

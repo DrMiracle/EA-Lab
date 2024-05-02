@@ -129,6 +129,16 @@ if __name__ == '__main__':
     experiment_stats_list = []
     for ff, no in itertools.product(fitness_functions, num_optimal):
         if (ff[0], no[0]) not in experiment_params:
+            if no[0] == num_optimal[-1][0]:
+                excel.write_ff_stats(experiment_stats_list)
+                for experiment_stats in experiment_stats_list:
+                    del experiment_stats.runs
+                    results.append(experiment_stats)
+
+                ff_end_time = time.time()
+                ff_name = experiment_params[(ff[0], 0)][0][2][0]
+                log(f'{ff_name} experiments finished in {(ff_end_time - ff_start_time):.2f}s')
+                experiment_stats_list = []
             continue
         ff_start_time = time.time()
 
@@ -165,3 +175,4 @@ if __name__ == '__main__':
 #     print(fh.get_optimal())
 #     print(fh.get_phenotype(genotype))
 #     # print(fh.get_phenotype(b'1')) # raises ValueError
+

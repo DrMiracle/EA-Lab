@@ -1,5 +1,3 @@
-from math import comb, sqrt
-
 import numpy as np
 from scipy.stats import fisher_exact, kendalltau
 
@@ -24,13 +22,13 @@ class GenerationStats:
         self.best_copies_percentage = None
         self.unique_chromosomes_count = None
         self.fitness_ratio = None
-        self.fisher_exact_test = None
-        self.kendalls_tau = None
 
         self.difference = None
         self.intensity = None
         self.reproduction_rate = None
         self.loss_of_diversity = None
+        self.fisher_exact_test = None
+        self.kendalls_tau = None
 
     def calculate_stats_before_selection(self, prev_gen_stats):
         self.ids_before_selection = set(self.population.get_ids())
@@ -58,7 +56,6 @@ class GenerationStats:
 
             self.fitnesses_before_selection = [ch.fitness for ch in self.population.chromosomes]
 
-
     def calculate_stats_after_selection(self, num_offsprings: list):
         ids_after_selection = set(self.population.get_ids())
         self.reproduction_rate = len(ids_after_selection) / N
@@ -73,20 +70,26 @@ class GenerationStats:
             else:
                 self.intensity = self.difference / self.f_std
 
-            fit_median = np.median(self.fitnesses_before_selection)
-            child_median = np.median(num_offsprings)
-            con_matrix = [[len([True for f, c in zip(self.fitnesses_before_selection, num_offsprings) if
-                                f <= fit_median and c <= child_median]),
-                           len([True for f, c in zip(self.fitnesses_before_selection, num_offsprings) if
-                                f > fit_median and c <= child_median])],
-                          [len([True for f, c in zip(self.fitnesses_before_selection, num_offsprings) if
-                                f <= fit_median and c > child_median]),
-                           len([True for f, c in zip(self.fitnesses_before_selection, num_offsprings) if
-                                f > fit_median and c > child_median])]]
-            _, self.fisher_exact_test = fisher_exact(con_matrix)
-            if self.fisher_exact_test > 1:
-                print("fisher is inf")
-            self.kendalls_tau, _ = kendalltau(self.fitnesses_before_selection, num_offsprings)
-            if self.kendalls_tau > 1:
-                print("kendal is inf")
+            self.fisher_exact_test = self.fisher_exact_test_f(self.fitnesses_before_selection, num_offsprings)
 
+            self.kendalls_tau, _ = kendalltau(self.fitnesses_before_selection, num_offsprings)
+            if np.isnan(self.kendalls_tau):
+                self.kendalls_tau = 0
+
+    @staticmethod
+    def fisher_exact_test_f(fitnesses_before_selection, num_offsprings):
+        fitnesses = np.array(fitnesses_before_selection)
+        num_offsprings = np.array(num_offsprings)
+
+        fit_median = np.median(fitnesses)
+        child_median = np.median(num_offsprings)
+
+        A = np.sum((fitnesses <= fit_median) & (num_offsprings <= child_median))
+        B = np.sum((fitnesses > fit_median) & (num_offsprings <= child_median))
+        C = np.sum((fitnesses <= fit_median) & (num_offsprings > child_median))
+        D = np.sum((fitnesses > fit_median) & (num_offsprings > child_median))
+        con_matrix = np.array([[A, B], [C, D]])
+        _, fisher_exact_test = fisher_exact(con_matrix, alternative='greater')
+        fisher_exact_test = -np.log10(fisher_exact_test)
+
+        return fisher_exact_test

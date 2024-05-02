@@ -1,5 +1,5 @@
 # environment parameters
-env = 'prod'
+env = 'test'
 THREADS = 16
 
 # run parameters
@@ -23,7 +23,7 @@ RUNS_TO_PLOT = 4
 OUTPUT_FOLDER = 'out_test' if env == 'test' else 'out'
 
 RUN_STATS_NAMES = [
-    'NI', 'F_found', 'F_avg',
+    'NI', 'F_found', 'F_avg', 'IsSuc',
     'RR_start', 'RR_min', 'NI_RR_min', 'RR_max', 'NI_RR_max', 'RR_avg', 'RR_fin',
     'Teta_start', 'Teta_min', 'NI_Teta_min', 'Teta_max', 'NI_Teta_max', 'Teta_avg', 'Teta_fin',
     'I_start', 'I_min', 'NI_I_min', 'I_max', 'NI_I_max', 'I_avg',
@@ -92,7 +92,7 @@ EXP_STATS_NAMES = [
     'Min_unique_X_start', 'Max_unique_X_start', 'Min_unique_X_fin', 'Max_unique_X_fin',
 ]
 FCONSTALL_RUN_STATS_NAMES = [
-    'NI',
+    'NI', 'IsSuc',
     'RR_min', 'NI_RR_min', 'RR_max', 'NI_RR_max', 'RR_avg',
     'Teta_min', 'NI_Teta_min', 'Teta_max', 'NI_Teta_max', 'Teta_avg'
 ]
