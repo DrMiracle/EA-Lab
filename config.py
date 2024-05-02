@@ -1,5 +1,5 @@
 # environment parameters
-env = 'prod'
+env = 'test'
 THREADS = 8
 
 # run parameters
@@ -93,7 +93,7 @@ EXP_STATS_NAMES = [
     'Min_unique_X_start', 'Max_unique_X_start', 'Min_unique_X_fin', 'Max_unique_X_fin',
 ]
 FCONSTALL_RUN_STATS_NAMES = [
-    'NI', 'isSuc',
+    'NI', 'IsSuc',
     'RR_min', 'NI_RR_min', 'RR_max', 'NI_RR_max', 'RR_avg',
     'Teta_min', 'NI_Teta_min', 'Teta_max', 'NI_Teta_max', 'Teta_avg'
 ]

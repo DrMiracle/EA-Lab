@@ -31,7 +31,6 @@ class GenerationStats:
 
     def calculate_stats_before_selection(self, prev_gen_stats):
         self.ids_before_selection = set(self.population.get_ids())
-
         self.unique_chromosomes_count = len(set([tuple(ch.genotype) for ch in self.population.chromosomes]))
 
         if self.param_names[0] != 'FconstALL':
@@ -77,8 +76,4 @@ class GenerationStats:
                           [len([True for f, c in zip(self.fitnesses_before_selection, num_offsprings) if f <= fit_median and c > child_median]),
                            len([True for f, c in zip(self.fitnesses_before_selection, num_offsprings) if f > fit_median and c > child_median])]]
             _, self.fisher_exact_test = fisher_exact(con_matrix)
-            if self.fisher_exact_test > 1:
-                print("fisher is inf")
             self.kendalls_tau, _ = kendalltau(self.fitnesses_before_selection, num_offsprings)
-            if self.kendalls_tau > 1:
-                print("kendal is inf")

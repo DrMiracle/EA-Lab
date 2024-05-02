@@ -41,7 +41,7 @@ class TS(SelectionMethod):
             probs[-1] = 1 - sum(probs[:-1])
             winner = s_conts_fits[np.random.choice(len(s_conts_fits), p=probs)]
             num_offsprings[winner[0][0]] += 1
-            mating_pool.append(winner[0][1])
+            mating_pool.append(deepcopy(winner[0][1]))
 
         return num_offsprings, mating_pool
 
@@ -68,7 +68,7 @@ class TS(SelectionMethod):
                 probs[-1] = 1 - sum(probs[:-1])
                 winner = s_conts_fits[np.random.choice(len(s_conts_fits), p=probs)]
                 num_offsprings[winner[0][0]] += 1
-                mating_pool.append(winner[0][1])
+                mating_pool.append(deepcopy(winner[0][1]))
         
         if remains:
             for _ in range(len(remains)/self.t):
@@ -81,7 +81,7 @@ class TS(SelectionMethod):
                 probs[-1] = 1 - sum(probs[:-1])
                 winner = s_conts_fits[np.random.choice(len(s_conts_fits), p=probs)]
                 num_offsprings[winner[0][0]] += 1
-                mating_pool.append(winner[0][1])
+                mating_pool.append(deepcopy(winner[0][1]))
 
         return num_offsprings, mating_pool
     

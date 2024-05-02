@@ -17,7 +17,9 @@ class Population:
                     self.chromosomes[i] = copy(fitness_function.get_optimal())
             rng = np.random.default_rng(seed=seed)
             for chr_i in range(num_optimal, N):
-                genotype = rng.choice([b'0', b'1'], fitness_function.chr_length)
+                genotype = fitness_function.get_optimal().genotype
+                while np.array_equal(fitness_function.get_optimal().genotype, genotype): 
+                    genotype = rng.choice([b'0', b'1'], fitness_function.chr_length)
                 self.chromosomes[chr_i] = Chromosome(chr_i, genotype, fitness_function)
 
         self.update()

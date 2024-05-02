@@ -82,6 +82,10 @@ def __plot_stat(
 
     if y_lim is not None:
         plt.ylim(*y_lim)
+    
+    if data[-1] is None:
+        x_ticks = range(1, len(data))
+        data = data[:-1]
 
     plt.plot(data)
     plt.ylabel(ylabel)

@@ -23,7 +23,7 @@ def pxi(x, fits):
 
 if env == 'test':
     fitness_functions = [
-        # (FconstALL(100), 'FconstALL'),
+        (FconstALL(100), 'FconstALL'),
         (FH(BinaryEncoder(100)), 'FH'),
         # (Fx2(FloatEncoder(0.0, 10.23, 10)), 'Fx2'),
         # (Fx2(FloatEncoder(0.0, 10.23, 10, is_gray=True)), 'Fx2_gray'),
@@ -38,24 +38,24 @@ if env == 'test':
         # (Frastr(7, FloatEncoder(-5.12, 5.11, 10)), 'Frastr'),
         # (Frastr(7, FloatEncoder(-5.12, 5.11, 10, is_gray=True)), 'Frastr_gray'),
         # (Fdeb2(FloatEncoder(0, 1.023, 10)), 'Fdeb2'),
-        #(Fdeb2(FloatEncoder(0, 1.023, 10, is_gray=True)), 'Fdeb2_gray'),
-        # (Fdeb4(FloatEncoder(0, 1.023, 10)), 'Fdeb4'),
+        (Fdeb2(FloatEncoder(0, 1.023, 10, is_gray=True)), 'Fdeb2_gray'),
+        (Fdeb4(FloatEncoder(0, 1.023, 10)), 'Fdeb4'),
         # (Fdeb4(FloatEncoder(0, 1.023, 10, is_gray=True)), 'Fdeb4_gray'),
     ]
     selection_methods = [
         (TS(2, p10, True), 'TS_replacement_1.0'),
         (TS(2, p075, True), 'TS_replacement_.75'),
-        (TS(2, p10, False), 'TS_noreplacement_1.0'),
-        (TS(2, p075, False), 'TS_noreplacement_.75'),
+        # (TS(2, p10, False), 'TS_noreplacement_1.0'),
+        # (TS(2, p075, False), 'TS_noreplacement_.75'),
     ]
     gen_operators = [
         (BlankGenOperator, 'no_operators'),
         # (Crossover, 'crossover'),
         # (Mutation, 'mutation'),
-        # (CrossoverAndMutation, 'crossover_mut')
+        (CrossoverAndMutation, 'crossover_mut')
     ]
     num_optimal = [
-        # (0, "no_optim"),
+        (0, "no_optim"),
         (1, "1_optim"),
         (int(N/20), "5per_optim"),
         # (int(N/10), "10per_optim")
@@ -140,7 +140,7 @@ if __name__ == '__main__':
                     results.append(experiment_stats)
 
                 ff_end_time = time.time()
-                ff_name = experiment_params[(ff[0], no[0])][0][2][0]
+                ff_name = experiment_params[(ff[0], 0)][0][2][0]
                 log(f'{ff_name} experiments finished in {(ff_end_time - ff_start_time):.2f}s')
                 experiment_stats_list = []
             continue
