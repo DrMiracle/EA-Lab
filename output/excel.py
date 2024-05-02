@@ -28,38 +28,40 @@ def write_ff_stats(experiment_stats_list: list[ExperimentStats]):
         'border': 1,
         'align': 'center',
         'fg_color': 'yellow'})
-    worksheet.freeze_panes(2, 3)
+    worksheet.freeze_panes(2, 4)
     
     for exp_i, experiment_stats in enumerate(experiment_stats_list):
         row = exp_i + 2
-        worksheet.write(row, 0, experiment_stats.params[1])
-        worksheet.write(row, 1, experiment_stats.params[2])
-        worksheet.write(row, 2, experiment_stats.params[3])
+        worksheet.write(row, 0, experiment_stats.params[1][:-4])
+        worksheet.write(row, 1, experiment_stats.params[1][-3:])
+        worksheet.write(row, 2, experiment_stats.params[2])
+        worksheet.write(row, 3, experiment_stats.params[3])
 
         run_stats_count = len(run_stats_names)
         for run_i, run_stats in enumerate(experiment_stats.runs):
             for stat_i, stat_name in enumerate(run_stats_names):
-                col = run_i * run_stats_count + stat_i + 3
+                col = run_i * run_stats_count + stat_i + 4
                 worksheet.write(row, col, getattr(run_stats, stat_name))
                 if exp_i == 0:
                     worksheet.write(1, col, stat_name)
 
             if exp_i == 0:
-                start_col = run_i * run_stats_count + 3
+                start_col = run_i * run_stats_count + 4
                 worksheet.merge_range(0, start_col, 0, start_col + run_stats_count - 1, f'Run {run_i}', merge_format)
 
         for stat_i, stat_name in enumerate(exp_stats_names):
-            col = run_stats_count * NR + stat_i + 3
+            col = run_stats_count * NR + stat_i + 4
             worksheet.write(row, col, getattr(experiment_stats, stat_name))
             if exp_i == 0:
                     worksheet.write(1, col, stat_name)
 
         if exp_i == 0:
-            start_col = run_stats_count * NR + 3
+            start_col = run_stats_count * NR + 4
             worksheet.merge_range(0, start_col, 0, start_col + len(exp_stats_names) - 1, f'Aggregated', merge_format)
             worksheet.merge_range(0, 0, 1, 0, 'Selection Method', merge_format)
-            worksheet.merge_range(0, 1, 1, 1, 'Genetic Operator', merge_format)
-            worksheet.merge_range(0, 2, 1, 2, 'Num Optimal', merge_format)
+            worksheet.merge_range(0, 1, 1, 1, 'Selection parameter p', merge_format)
+            worksheet.merge_range(0, 2, 1, 2, 'Genetic Operator', merge_format)
+            worksheet.merge_range(0, 3, 1, 3, 'Num Optimal', merge_format)
        
     workbook.close()
     
@@ -119,11 +121,13 @@ def write_generation_stats(generation_stats_list, param_names, run_i):
             if i >= len(generation_stats_list):
                 break
             row = i + 1
-            gen_stats = generation_stats_list[i]
-            # write generation number
             worksheet.write(row, 0, i + 1)
             for col in range(len(GEN_STATS_NAMES)):
-                worksheet.write(row, col + 1, getattr(gen_stats, GEN_STATS_NAMES[col]))
+                if getattr(generation_stats_list[-1], GEN_STATS_NAMES[col]) is None:
+                    if i != 0:
+                        worksheet.write(row, col + 1, getattr(generation_stats_list[i-1], GEN_STATS_NAMES[col]))
+                else:
+                    worksheet.write(row, col + 1, getattr(generation_stats_list[i], GEN_STATS_NAMES[col]))
     else:
         for col in range(len(FCONSTALL_GEN_STATS_NAMES)):
             worksheet.write(0, col + 1, FCONSTALL_GEN_STATS_NAMES[col])

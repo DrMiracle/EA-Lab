@@ -1,11 +1,11 @@
 # environment parameters
 env = 'test'
-THREADS = 8
+THREADS = 4
 
 # run parameters
 N = 100 if env == 'test' else 100
 G = 1000 if env == 'test' else 10000000
-NR = 24 if env == 'test' else 100
+NR = 4 if env == 'test' else 100
 
 # convergence parameters
 EPS = 0.0001
