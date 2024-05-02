@@ -1,5 +1,5 @@
 # environment parameters
-env = 'test'
+env = 'prod'
 THREADS = 8
 
 # run parameters
@@ -19,18 +19,18 @@ get_pop_seed = lambda run_i: 1381*run_i + 5912826
 # output parameters
 ITER_TO_PLOT = 50
 DISTRIBUTIONS_TO_PLOT = 4
-RUNS_TO_PLOT = 5
+RUNS_TO_PLOT = 4
 OUTPUT_FOLDER = 'out_test' if env == 'test' else 'out'
 
 
 
 RUN_STATS_NAMES = [
-    'NI', 'F_found', 'F_avg',
+    'NI', 'F_found', 'F_avg', 'IsSuc',
     'RR_start', 'RR_min', 'NI_RR_min', 'RR_max', 'NI_RR_max', 'RR_avg', 'RR_fin',
     'Teta_start', 'Teta_min', 'NI_Teta_min', 'Teta_max', 'NI_Teta_max', 'Teta_avg', 'Teta_fin',
-    'I_min', 'NI_I_min', 'I_max', 'NI_I_max', 'I_avg',
+    'I_start', 'I_min', 'NI_I_min', 'I_max', 'NI_I_max', 'I_avg',
     's_start', 's_min', 'NI_s_min', 's_max', 'NI_s_max', 's_avg',
-    'GR_early', 'GR_late', 'NI_GR_late', 'GR_avg',
+    'GR_start', 'GR_early', 'GR_late', 'NI_GR_late', 'GR_avg',
     'Pr_start', 'Pr_min', 'NI_Pr_min', 'Pr_max', 'NI_Pr_max', 'Pr_avg',
     'Fish_start', 'Fish_min', 'NI_Fish_min', 'Fish_max', 'NI_Fish_max', 'Fish_avg',
     'Kend_start', 'Kend_min', 'NI_Kend_min', 'Kend_max', 'NI_Kend_max', 'Kend_avg',
@@ -59,6 +59,7 @@ EXP_STATS_NAMES = [
     'Min_I_min', 'NI_I_min', 'Max_I_max', 'NI_I_max',
     'Avg_I_min', 'Avg_I_max', 'Avg_I_avg',
     'Sigma_I_min', 'Sigma_I_max', 'Sigma_I_avg',
+    'Min_I_start', 'Max_I_start', 'Avg_I_start', 'Sigma_I_start',
     
     'Min_s_min', 'NI_s_min', 'Max_s_max', 'NI_s_max',
     'Avg_s_min', 'Avg_s_max', 'Avg_s_avg',
@@ -92,7 +93,7 @@ EXP_STATS_NAMES = [
     'Min_unique_X_start', 'Max_unique_X_start', 'Min_unique_X_fin', 'Max_unique_X_fin',
 ]
 FCONSTALL_RUN_STATS_NAMES = [
-    'NI',
+    'NI', 'isSuc',
     'RR_min', 'NI_RR_min', 'RR_max', 'NI_RR_max', 'RR_avg',
     'Teta_min', 'NI_Teta_min', 'Teta_max', 'NI_Teta_max', 'Teta_avg'
 ]

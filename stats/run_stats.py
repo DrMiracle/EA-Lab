@@ -8,7 +8,7 @@ class RunStats:
         self.NI = None
         self.F_found = None
         self.F_avg = None
-        self.is_successful = False
+        self.IsSuc = False
         self.is_converged = False
 
         # Reproduction Rate

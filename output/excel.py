@@ -10,7 +10,7 @@ def write_ff_stats(experiment_stats_list: list[ExperimentStats]):
     path = f'{OUTPUT_FOLDER}/tables/{ff_name}'
     filename = f'{ff_name}_{N}.xlsx'
 
-    if ff_name == 'FconstALL_None':
+    if ff_name == 'FconstALL':
         run_stats_names = FCONSTALL_RUN_STATS_NAMES
         exp_stats_names = FCONSTALL_EXP_STATS_NAMES
     else:
@@ -74,23 +74,25 @@ def write_aggregated_stats(experiment_stats_list: list[ExperimentStats]):
     workbook = xlsxwriter.Workbook(f'{path}/{filename}', {"nan_inf_to_errors": True})
     worksheet = workbook.add_worksheet()
     worksheet.name = 'aggregated'
-    worksheet.freeze_panes(1, 4)
+    worksheet.freeze_panes(1, 5)
 
     for exp_i, experiment_stats in enumerate(experiment_stats_list):
         if exp_i == 0:
             worksheet.write(0, 0, 'Fitness Function')
             worksheet.write(0, 1, 'Selection Method')
-            worksheet.write(0, 2, 'Genetic Operator')
-            worksheet.write(0, 3, 'Num Optimal')
+            worksheet.write(0, 2, 'Selection parameter p')
+            worksheet.write(0, 3, 'Genetic Operator')
+            worksheet.write(0, 4, 'Num Optimal')
 
         row = exp_i + 1
         worksheet.write(row, 0, experiment_stats.params[0])
-        worksheet.write(row, 1, experiment_stats.params[1])
-        worksheet.write(row, 2, experiment_stats.params[2])
-        worksheet.write(row, 3, experiment_stats.params[3])
+        worksheet.write(row, 1, experiment_stats.params[1][:-4])
+        worksheet.write(row, 2, experiment_stats.params[1][-3:])
+        worksheet.write(row, 3, experiment_stats.params[2])
+        worksheet.write(row, 4, experiment_stats.params[3])
         
         for stat_i, stat_name in enumerate(EXP_STATS_NAMES):
-            col = stat_i + 4
+            col = stat_i + 5
             worksheet.write(row, col, getattr(experiment_stats, stat_name))
             if exp_i == 0:
                 worksheet.write(0, col, stat_name)

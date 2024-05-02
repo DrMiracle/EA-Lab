@@ -10,16 +10,16 @@ from datetime import datetime
 import itertools
 import time
 
-def p10(x):
+def p10(x, fits):
     return 1
-def p08(x):
+def p08(x, fits):
     return 0.8
-def p075(x):
+def p075(x, fits):
     return 0.75
-def p06(x):
+def p06(x, fits):
     return 0.6
-def pxi(x): 
-    return np.max(x)/(np.sum(x) if np.sum(x) > 0 else 0.001)
+def pxi(x, fits): 
+    return x/np.sum(fits) if np.sum(fits) > 0 else 0
 
 if env == 'test':
     fitness_functions = [
@@ -38,25 +38,25 @@ if env == 'test':
         # (Frastr(7, FloatEncoder(-5.12, 5.11, 10)), 'Frastr'),
         # (Frastr(7, FloatEncoder(-5.12, 5.11, 10, is_gray=True)), 'Frastr_gray'),
         # (Fdeb2(FloatEncoder(0, 1.023, 10)), 'Fdeb2'),
-        (Fdeb2(FloatEncoder(0, 1.023, 10, is_gray=True)), 'Fdeb2_gray'),
+        #(Fdeb2(FloatEncoder(0, 1.023, 10, is_gray=True)), 'Fdeb2_gray'),
         # (Fdeb4(FloatEncoder(0, 1.023, 10)), 'Fdeb4'),
         # (Fdeb4(FloatEncoder(0, 1.023, 10, is_gray=True)), 'Fdeb4_gray'),
     ]
     selection_methods = [
-        # (TS(2, p10, True), 'TS_1_replacement'),
-        # (TS(2, p075, True), 'TS_0.75_replacement'),
-        (TS(2, p10, False), 'TS_1_noreplacement'),
-        (TS(2, p075, False), 'TS_0.75_noreplacement'),
+        (TS(2, p10, True), 'TS_replacement_1.0'),
+        (TS(2, p075, True), 'TS_replacement_.75'),
+        (TS(2, p10, False), 'TS_noreplacement_1.0'),
+        (TS(2, p075, False), 'TS_noreplacement_.75'),
     ]
     gen_operators = [
         (BlankGenOperator, 'no_operators'),
         # (Crossover, 'crossover'),
         # (Mutation, 'mutation'),
-        (CrossoverAndMutation, 'crossover_mut')
+        # (CrossoverAndMutation, 'crossover_mut')
     ]
     num_optimal = [
-        (0, "no_optim"),
-        # (1, "1_optim"),
+        # (0, "no_optim"),
+        (1, "1_optim"),
         (int(N/20), "5per_optim"),
         # (int(N/10), "10per_optim")
     ]
@@ -82,14 +82,14 @@ else:
         (Fdeb4(FloatEncoder(0, 1.023, 10, is_gray=True)), 'Fdeb4_gray'),
     ]
     selection_methods = [
-        (TS(2, p10, True), 'TS_1_replacement'),
-        (TS(2, p08, True), 'TS_0.8_replacement'),
-        (TS(2, p06, True), 'TS_0.6_replacement'),
-        (TS(2, pxi, True), 'TS_f_replacement'),
-        (TS(2, p10, False), 'TS_1_noreplacement'),
-        (TS(2, p08, False), 'TS_0.8_noreplacement'),
-        (TS(2, p06, False), 'TS_0.6_noreplacement'),
-        (TS(2, pxi, False), 'TS_f_noreplacement')
+        (TS(2, p10, True), 'TS_replacement_1.0'),
+        (TS(2, p08, True), 'TS_replacement_0.8'),
+        (TS(2, p06, True), 'TS_replacement_0.6'),
+        (TS(2, pxi, True), 'TS_replacement_fnc'),
+        (TS(2, p10, False), 'TS_noreplacement_1.0'),
+        (TS(2, p08, False), 'TS_noreplacement_0.8'),
+        (TS(2, p06, False), 'TS_noreplacement_0.6'),
+        (TS(2, pxi, False), 'TS_noreplacement_fnc')
     ]
     gen_operators = [
         (BlankGenOperator, 'no_operators'),
@@ -133,6 +133,16 @@ if __name__ == '__main__':
     experiment_stats_list = []
     for ff, no in itertools.product(fitness_functions, num_optimal):
         if (ff[0], no[0]) not in experiment_params:
+            if no[0] == num_optimal[-1][0]:
+                excel.write_ff_stats(experiment_stats_list)
+                for experiment_stats in experiment_stats_list:
+                    del experiment_stats.runs
+                    results.append(experiment_stats)
+
+                ff_end_time = time.time()
+                ff_name = experiment_params[(ff[0], no[0])][0][2][0]
+                log(f'{ff_name} experiments finished in {(ff_end_time - ff_start_time):.2f}s')
+                experiment_stats_list = []
             continue
         ff_start_time = time.time()
 
