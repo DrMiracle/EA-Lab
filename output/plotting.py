@@ -50,7 +50,7 @@ def plot_run_stats(
         __plot_stat(fitness_ratio, param_names, run_i, 'Fitness Ratio (f_max / f_avg)', 'fitness_ratio')
 
         fisher_exact_test = [gen_stats.fisher_exact_test for gen_stats in gen_stats_list]
-        __plot_stat(fisher_exact_test, param_names, run_i, 'Fisher\'s Exact Test', 'fisher_exact_test', y_lim = (0, 1.01))
+        __plot_stat(fisher_exact_test, param_names, run_i, 'Fisher\'s Exact Test', 'fisher_exact_test')
         
         kendalls_tau = [gen_stats.kendalls_tau for gen_stats in gen_stats_list]
         __plot_stat(kendalls_tau, param_names, run_i, 'Kendall\'s Tau-b', 'kendalls_tau_b', y_lim = (-1.01, 1.01))

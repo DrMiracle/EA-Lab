@@ -7,6 +7,7 @@ from model.gen_operators import *
 from output import excel
 from runner import run_experiment
 from datetime import datetime
+from stats.generation_stats import *
 import itertools
 import time
 
@@ -23,8 +24,8 @@ def pxi(x, fits):
 
 if env == 'test':
     fitness_functions = [
-        (FconstALL(100), 'FconstALL'),
-        (FH(BinaryEncoder(100)), 'FH'),
+        # (FconstALL(100), 'FconstALL'),
+        # (FH(BinaryEncoder(100)), 'FH'),
         # (Fx2(FloatEncoder(0.0, 10.23, 10)), 'Fx2'),
         # (Fx2(FloatEncoder(0.0, 10.23, 10, is_gray=True)), 'Fx2_gray'),
         # (F5122subx2(FloatEncoder(-5.12, 5.11, 10)), 'F5122subx2'),
@@ -36,7 +37,7 @@ if env == 'test':
         # (Fexp(2, FloatEncoder(0.0, 10.23, 10)), 'Fexp2'),
         # (Fexp(2, FloatEncoder(0.0, 10.23, 10, is_gray=True)), 'Fexp2_gray'),
         # (Frastr(7, FloatEncoder(-5.12, 5.11, 10)), 'Frastr'),
-        # (Frastr(7, FloatEncoder(-5.12, 5.11, 10, is_gray=True)), 'Frastr_gray'),
+        (Frastr(7, FloatEncoder(-5.12, 5.11, 10, is_gray=True)), 'Frastr_gray'),
         # (Fdeb2(FloatEncoder(0, 1.023, 10)), 'Fdeb2'),
         (Fdeb2(FloatEncoder(0, 1.023, 10, is_gray=True)), 'Fdeb2_gray'),
         (Fdeb4(FloatEncoder(0, 1.023, 10)), 'Fdeb4'),
@@ -44,9 +45,9 @@ if env == 'test':
     ]
     selection_methods = [
         (TS(2, p10, True), 'TS_replacement_1.0'),
-        (TS(2, p075, True), 'TS_replacement_.75'),
+        # (TS(2, p075, True), 'TS_replacement_.75'),
         # (TS(2, p10, False), 'TS_noreplacement_1.0'),
-        # (TS(2, p075, False), 'TS_noreplacement_.75'),
+        (TS(2, p075, False), 'TS_noreplacement_.75'),
     ]
     gen_operators = [
         (BlankGenOperator, 'no_operators'),
@@ -57,7 +58,7 @@ if env == 'test':
     num_optimal = [
         (0, "no_optim"),
         (1, "1_optim"),
-        (int(N/20), "5per_optim"),
+        # (int(N/20), "5per_optim"),
         # (int(N/10), "10per_optim")
     ]
 else:
