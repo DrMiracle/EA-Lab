@@ -3,7 +3,7 @@ env = 'test'
 THREADS = 4
 
 # run parameters
-N = 100 if env == 'test' else 100
+N = 100 if env == 'test' else 200
 G = 1000 if env == 'test' else 10000000
 NR = 4 if env == 'test' else 100
 
@@ -19,7 +19,7 @@ get_pop_seed = lambda run_i: 1381*run_i + 5912826
 # output parameters
 ITER_TO_PLOT = 50
 DISTRIBUTIONS_TO_PLOT = 4
-RUNS_TO_PLOT = 4
+RUNS_TO_PLOT = 2
 OUTPUT_FOLDER = 'out_test' if env == 'test' else 'out'
 
 

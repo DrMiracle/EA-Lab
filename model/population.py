@@ -14,7 +14,8 @@ class Population:
             self.chromosomes = np.empty(N, dtype=object)
             if num_optimal != 0:
                 for i in range(num_optimal):
-                    self.chromosomes[i] = copy(fitness_function.get_optimal())
+                    genotype = fitness_function.get_optimal().genotype
+                    self.chromosomes[i] = Chromosome(i, genotype, fitness_function)
             rng = np.random.default_rng(seed=seed)
             for chr_i in range(num_optimal, N):
                 genotype = fitness_function.get_optimal().genotype
