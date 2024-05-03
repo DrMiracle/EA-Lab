@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+from matplotlib.ticker import MaxNLocator
 from config import N, OUTPUT_FOLDER
 import os
 from model.population import Population
@@ -83,14 +84,18 @@ def __plot_stat(
     if y_lim is not None:
         plt.ylim(*y_lim)
     
+    x_ticks = range(len(data))
     if data[-1] is None:
         x_ticks = range(1, len(data))
         data = data[:-1]
 
-    plt.plot(data)
+    plt.plot(x_ticks, data)
     plt.ylabel(ylabel)
     plt.xlabel('Generation')
-    plt.savefig(f'{path}/{file_name}.png')
+
+    plt.gca().xaxis.set_major_locator(MaxNLocator(integer=True, nbins=10))
+
+    plt.savefig(f'{path}/{file_name}.svg', format = 'svg')
     plt.close()
 
 def __plot_stat2(
@@ -114,7 +119,10 @@ def __plot_stat2(
 
     plt.xlabel('Generation')
     plt.legend()
-    plt.savefig(f'{path}/{file_name}.png')
+
+    plt.gca().xaxis.set_major_locator(MaxNLocator(integer=True, nbins=10))
+
+    plt.savefig(f'{path}/{file_name}.svg', format = 'svg')
     plt.close()
 
 def __plot_fitness_distribution(
@@ -133,7 +141,7 @@ def __plot_fitness_distribution(
     plt.bar(x, y, width=x_step*0.8)
     plt.xlabel('Chromosome fitness')
     plt.ylabel('Number of chromosomes')
-    plt.savefig(f'{path}/{gen_i}.png')
+    plt.savefig(f'{path}/{gen_i}.svg', format = 'svg')
     plt.close()
 
 def __plot_phenotype_distribution(
@@ -155,7 +163,7 @@ def __plot_phenotype_distribution(
     plt.bar(x, y, width=x_step*0.8)
     plt.xlabel('Chromosome phenotype')
     plt.ylabel('Number of chromosomes')
-    plt.savefig(f'{path}/{gen_i}.png')
+    plt.savefig(f'{path}/{gen_i}.svg', format = 'svg')
     plt.close()
 
 def __plot_genotype_distribution(
@@ -173,7 +181,7 @@ def __plot_genotype_distribution(
     plt.bar(x, y)
     plt.xlabel('Number of 1s in genotype')
     plt.ylabel('Number of chromosomes')
-    plt.savefig(f'{path}/{gen_i}.png')
+    plt.savefig(f'{path}/{gen_i}.svg', format = 'svg')
     plt.close()
 
 def __get_distribution(data, x_min=0, x_max=None, x_step=1):
