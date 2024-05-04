@@ -3,7 +3,7 @@ import glob
 import os
 
 # Set the directory where the Excel files are located
-directory = "D:/Генетичні алгоритми/EA-Lab/out/tables"
+directory = "D:/Генетичні алгоритми/EA-Lab/out-toaggr"
 
 # Get a list of all Excel files in the directory
 excel_files = glob.glob(os.path.join(directory, '*.xlsx'))

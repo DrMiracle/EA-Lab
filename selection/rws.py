@@ -4,6 +4,7 @@ from selection.selection_method import SelectionMethod
 from copy import copy, deepcopy
 
 
+
 class LinearRankingRWS(SelectionMethod):
     def __init__(self, beta_value):
         self.beta_value = beta_value
@@ -71,7 +72,6 @@ class LinearRankingModifiedRWS(SelectionMethod):
         rank_order = np.argsort(fitness_list)
         ranks = np.empty(n)
         ranks[rank_order] = np.arange(0, n)
-        chromosomes = [(i, ch) for i, ch in enumerate(population.chromosomes)]
 
         # Calculate modified ranks for chromosomes with equal fitness
         modified_ranks = np.empty(n)
@@ -83,8 +83,7 @@ class LinearRankingModifiedRWS(SelectionMethod):
             modified_ranks[i:i + count] = np.mean(ranks[i:i + count])
             i += count
 
-        probabilities = ((2 - self.beta_value_modified) / n) + (2 * modified_ranks * (self.beta_value_modified - 1)) / (
-                    n * (n - 1))
+        probabilities = ((2 - self.beta_value_modified) / n) + (2 * ranks * (self.beta_value_modified - 1)) / (n * (n - 1))
 
         chosen = np.random.choice(len(population.chromosomes), size=n, p=probabilities)
 

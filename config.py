@@ -1,5 +1,5 @@
 # environment parameters
-env = 'test'
+env = 'prod'
 THREADS = 16
 
 # run parameters

@@ -124,7 +124,6 @@ class RunStats:
         # X
         if self.unique_X_start is None:
             self.unique_X_start = gen_stats.unique_chromosomes_count
-        self.unique_X_fin = gen_stats.unique_chromosomes_count
 
         if self.param_names[0] != 'FconstALL':
             # Selection Intensity
@@ -227,6 +226,8 @@ class RunStats:
                     self._MaxOptSaved_NI_loose = gen_stats.optimal_count
 
     def update_final_stats(self, gen_stats: GenerationStats, gen_i):
+        self.unique_X_fin = gen_stats.unique_chromosomes_count
+
         if self.param_names[0] != 'FconstALL':
             self.F_found = gen_stats.f_best
             self.F_avg = gen_stats.f_avg
