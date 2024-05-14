@@ -14,49 +14,13 @@ import time
 # Initialize parameters
 beta_values = [2, 1.6, 1.4]
 c_values = [0.9801, 0.96059601, 0.922744694, 0.904382075]
-beta_value_modified = 1.4
+beta_value_mod = 1.4
 
 
 if env == 'test':
     fitness_functions = [
-        # (FconstALL(100), 'FconstALL'),
-        (FH(BinaryEncoder(100)), 'FH'),
-        #(Fx2(FloatEncoder(0.0, 10.23, 10)), 'Fx2'),
-        # (Fx2(FloatEncoder(0.0, 10.23, 10, is_gray=True)), 'Fx2_gray'),
-        (F5122subx2(FloatEncoder(-5.12, 5.11, 10)), 'F5122subx2'),
-        #(F5122subx2(FloatEncoder(-5.12, 5.11, 10, is_gray=True)), 'F5122subx2_gray'),
-        # (Fexp(0.25, FloatEncoder(0.0, 10.23, 10)), 'Fexp0.25'),
-        # (Fexp(0.25, FloatEncoder(0.0, 10.23, 10, is_gray=True)), 'Fexp0.25_gray'),
-        # (Fexp(1, FloatEncoder(0.0, 10.23, 10)), 'Fexp1'),
-        # (Fexp(1, FloatEncoder(0.0, 10.23, 10, is_gray=True)), 'Fexp1_gray'),
-        # (Fexp(2, FloatEncoder(0.0, 10.23, 10)), 'Fexp2'),
-        # (Fexp(2, FloatEncoder(0.0, 10.23, 10, is_gray=True)), 'Fexp2_gray'),
-        # (Frastr(7, FloatEncoder(-5.12, 5.11, 10)), 'Frastr'),
-        # (Frastr(7, FloatEncoder(-5.12, 5.11, 10, is_gray=True)), 'Frastr_gray'),
-        # (Fdeb2(FloatEncoder(0, 1.023, 10)), 'Fdeb2'),
-        # (Fdeb2(FloatEncoder(0, 1.023, 10, is_gray=True)), 'Fdeb2_gray'),
-        # (Fdeb4(FloatEncoder(0, 1.023, 10)), 'Fdeb4'),
-        # (Fdeb4(FloatEncoder(0, 1.023, 10, is_gray=True)), 'Fdeb4_gray'),
-    ]
-    selection_methods = [
-        # (SUS(), 'SUS (n)'),
-        (LinearRankingRWS(1.6), 'RWS_linear_test (1.6)'),
-        (ExponentialRankingRWS(0.966), 'RWS_exponential_test (0.966)'),
-        # (LinearRankingModifiedRWS(beta_value_modified), 'RWS_linear_modified'),
-    ]
-    gen_operators = [
-        (BlankGenOperator, 'no_operators')
-    ]
-    num_optimal = [
-        (0, "no_optim"),
-        (1, "1_optim"),
-        # (int(N/20), "5per_optim"),
-        # (int(N/10), "10per_optim")
-    ]
-else:
-    fitness_functions = [
         (FconstALL(100), 'FconstALL'),
-        (FH(BinaryEncoder(100)), 'FH'),
+        # (FH(BinaryEncoder(100)), 'FH'),
         (Fx2(FloatEncoder(0.0, 10.23, 10)), 'Fx2'),
         (Fx2(FloatEncoder(0.0, 10.23, 10, is_gray=True)), 'Fx2_gray'),
         (F5122subx2(FloatEncoder(-5.12, 5.11, 10)), 'F5122subx2'),
@@ -75,6 +39,44 @@ else:
         (Fdeb4(FloatEncoder(0, 1.023, 10, is_gray=True)), 'Fdeb4_gray'),
     ]
     selection_methods = [
+        # (SUS(), 'SUS (n)'),
+        (LinearRankingModifiedRWS(1.6), 'lin (1.6)'),
+        (LinearRankingRWS(1.6), 'RWS_linear_test (1.6)'),
+        # (LinearRankingModifiedRWS(1.4), 'linear rws (1.4)'),
+
+        # (LinearRankingModifiedRWS(beta_value_mod), 'RWS_linear_modified'),
+    ]
+    gen_operators = [
+        (BlankGenOperator, 'no_operators')
+    ]
+    num_optimal = [
+        (0, "no_optim"),
+        (1, "1_optim"),
+        # (int(N/20), "5per_optim"),
+        # (int(N/10), "10per_optim")
+    ]
+else:
+    fitness_functions = [
+        # (FconstALL(100), 'FconstALL'),
+        # (FH(BinaryEncoder(100)), 'FH'),
+        # (Fx2(FloatEncoder(0.0, 10.23, 10)), 'Fx2'),
+        # (Fx2(FloatEncoder(0.0, 10.23, 10, is_gray=True)), 'Fx2_gray'),
+        # (F5122subx2(FloatEncoder(-5.12, 5.11, 10)), 'F5122subx2'),
+        # (F5122subx2(FloatEncoder(-5.12, 5.11, 10, is_gray=True)), 'F5122subx2_gray'),
+        # (Fexp(0.25, FloatEncoder(0.0, 10.23, 10)), 'Fexp0.25'),
+        # (Fexp(0.25, FloatEncoder(0.0, 10.23, 10, is_gray=True)), 'Fexp0.25_gray'),
+        # (Fexp(1, FloatEncoder(0.0, 10.23, 10)), 'Fexp1'),
+        # (Fexp(1, FloatEncoder(0.0, 10.23, 10, is_gray=True)), 'Fexp1_gray'),
+        # (Fexp(2, FloatEncoder(0.0, 10.23, 10)), 'Fexp2'),
+        # (Fexp(2, FloatEncoder(0.0, 10.23, 10, is_gray=True)), 'Fexp2_gray'),
+        (Frastr(7, FloatEncoder(-5.12, 5.11, 10)), 'Frastr'),
+        (Frastr(7, FloatEncoder(-5.12, 5.11, 10, is_gray=True)), 'Frastr_gray'),
+        # (Fdeb2(FloatEncoder(0, 1.023, 10)), 'Fdeb2'),
+        # (Fdeb2(FloatEncoder(0, 1.023, 10, is_gray=True)), 'Fdeb2_gray'),
+        # (Fdeb4(FloatEncoder(0, 1.023, 10)), 'Fdeb4'),
+        # (Fdeb4(FloatEncoder(0, 1.023, 10, is_gray=True)), 'Fdeb4_gray'),
+    ]
+    selection_methods = [
         (LinearRankingRWS(beta_values[0]), 'RWS_linear (2)'),
         (LinearRankingRWS(beta_values[1]), 'RWS_linear (1.6)'),
         (LinearRankingRWS(beta_values[2]), 'RWS_linear (1.4)'),
@@ -82,13 +84,13 @@ else:
         (ExponentialRankingRWS(c_values[1]), 'RWS_exponential (0.96059601)'),
         (ExponentialRankingRWS(c_values[2]), 'RWS_exponential (0.922744694)'),
         (ExponentialRankingRWS(c_values[3]), 'RWS_exponential (0.904382075)'),
-        (LinearRankingModifiedRWS(beta_value_modified), 'RWS_linear_modified (1.4)'),
+        (LinearRankingModifiedRWS(beta_value_mod), 'RWS_modified_linear (1.4)'),
     ]
     gen_operators = [
         (BlankGenOperator, 'no_operators'),
-        # (Crossover, 'crossover'),
-        # (Mutation, 'mutation'),
-        # (CrossoverAndMutation, 'crossover_mut')
+        (Crossover, 'crossover'),
+        (Mutation, 'mutation'),
+        (CrossoverAndMutation, 'crossover_mut')
     ]
     num_optimal = [
         (0, "no_optim"),
